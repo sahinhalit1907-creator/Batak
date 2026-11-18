@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>Batak Ustası</title>
 <style>
-:root{--base:clamp(54px,min(11.5vw,13.5vh),122px);--cw:var(--base);--ch:calc(var(--cw)*1.42);--gold:#e8c26b}
+:root{--base:clamp(40px,min(8.5vw,9.5vh),92px);--tcw:clamp(50px,min(11.5vw,12.5vh),108px);--hcw:clamp(64px,min(19vw,19vh),170px);--rcw:clamp(32px,min(7vw,7.5vh),54px);--cw:var(--base);--ch:calc(var(--cw)*1.42);--gold:#d8b86a}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;height:100%;background:#06241a;color:#f3efe0;font-family:'Segoe UI',system-ui,Roboto,sans-serif;overflow:hidden}
+html,body{margin:0;height:100%;background:#0b1d17;color:#e4e0d0;font-family:'Segoe UI',system-ui,Roboto,sans-serif;overflow:hidden}
 #app{display:flex;flex-direction:column;height:100dvh}
-header{display:flex;gap:8px;align-items:center;padding:3px 8px;position:relative;z-index:40;background:linear-gradient(#0b1f17,#08170f);border-bottom:1px solid #2b5a43;flex-wrap:wrap}
+header{display:flex;gap:8px;align-items:center;padding:3px 8px;position:relative;z-index:40;background:linear-gradient(#0f221b,#0b1914);border-bottom:1px solid #29503f;flex-wrap:wrap}
 header h1{font-size:14px;margin:0;color:var(--gold);letter-spacing:.5px;white-space:nowrap}
 #scorebar{display:flex;gap:6px;flex:1;overflow:auto;font-size:12px;min-width:0;scrollbar-width:none}
 #live{display:none;justify-content:center;gap:6px;flex-wrap:wrap;padding:3px 8px;background:#071a12;border-bottom:1px solid #1d4633;font-size:12.5px}
@@ -22,11 +22,11 @@ header h1{font-size:14px;margin:0;color:var(--gold);letter-spacing:.5px;white-sp
 #drop{display:none;position:absolute;right:0;top:100%;margin-top:6px;flex-direction:column;gap:6px;background:rgba(5,25,17,.97);border:1px solid var(--gold);border-radius:12px;padding:8px;box-shadow:0 10px 30px rgba(0,0,0,.6);min-width:150px}
 #drop.open{display:flex}
 #drop .btn{text-align:left;white-space:nowrap}
-.chip{padding:3px 9px;border-radius:12px;background:#143a2b;border:1px solid #2b5a43;white-space:nowrap}
+.chip{padding:3px 9px;border-radius:12px;background:#16352a;border:1px solid #29503f;white-space:nowrap}
 .chip b{color:var(--gold)}
 .chip.me{border-color:var(--gold)}
 button{font:inherit;cursor:pointer}
-.btn{background:#1b4d38;color:#f3efe0;border:1px solid #3c8a63;border-radius:8px;padding:6px 11px;font-size:13px}
+.btn{background:#1d4536;color:#e4e0d0;border:1px solid #37755a;border-radius:8px;padding:6px 11px;font-size:13px}
 .btn:hover{background:#23684a}
 .btn:disabled{opacity:.4;cursor:default}
 .btn.gold{background:linear-gradient(#f3d27d,#caa043);color:#3a2a00;border-color:#f3d27d;font-weight:700}
@@ -34,15 +34,15 @@ button{font:inherit;cursor:pointer}
 .btn.suit{font-size:24px;padding:4px 14px;background:#f6f1e0;color:#111;border-color:#b9b19a}
 .btn.suit.r{color:#c4161c}
 .btn.suit.on{outline:3px solid var(--gold)}
-#table{flex:1;min-height:0;position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2.3fr) minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto;overflow:hidden;background:radial-gradient(ellipse at center,#12714a 0%,#0c4a31 55%,#073021 100%)}
+#table{flex:1;min-height:0;position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2.3fr) minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto;overflow:hidden;background:radial-gradient(ellipse at center,#1c5a44 0%,#154334 55%,#0f2f25 100%)}
 .seat{overflow:visible;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:4px;min-width:0}
 #p-t{grid-column:1/4;grid-row:1}
 #p-l{grid-column:1;grid-row:2}
 #p-r{grid-column:3;grid-row:2}
 #center{grid-column:2;grid-row:2;overflow:hidden;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:0}
 #bottom{grid-column:1/4;grid-row:3;position:relative;padding-bottom:6px}
-.pbox{display:flex;align-items:center;gap:6px;background:rgba(0,0,0,.35);border:2px solid transparent;border-radius:12px;padding:4px 9px;font-size:12px;max-width:100%}
-.pbox.turn{border-color:var(--gold);box-shadow:0 0 14px rgba(232,194,107,.7)}
+.pbox{display:flex;align-items:center;gap:6px;background:rgba(0,0,0,.28);border:2px solid transparent;border-radius:12px;padding:4px 9px;font-size:12px;max-width:100%}
+.pbox.turn{border-color:var(--gold);box-shadow:0 0 9px rgba(216,184,106,.4)}
 .pbox .av{font-size:22px}
 .pbox .nm{font-weight:700;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pbox .meta{font-size:11px;opacity:.9}
@@ -52,15 +52,15 @@ button{font:inherit;cursor:pointer}
 .bub{min-height:20px;font-size:13px;font-weight:700;color:var(--gold);text-shadow:0 1px 2px #000}
 .stk{display:flex}
 .stk.v{flex-direction:column}
-.stk .card.back{--cw:calc(var(--base)*.62)}
+.stk .card.back{--cw:calc(var(--base)*.6)}
 .stk:not(.v) .card.back+.card.back{margin-left:calc(var(--base)*-.4)}
 .stk.v .card.back+.card.back{margin-top:calc(var(--base)*-.7)}
 .rev{display:flex;flex-wrap:wrap;gap:3px 0;justify-content:center;max-width:100%}
-.rev .card{--cw:calc(var(--base)*.52)}
+.rev .card{--cw:var(--rcw)}
 .rev{flex-direction:column;flex-wrap:nowrap;gap:3px;align-items:center}
 .rev.l{align-items:flex-start}.rev.r{align-items:flex-end}
 .rev .rr{display:flex}
-.rev .rr .card+.card{margin-left:calc(var(--base)*-.3)}
+.rev .rr .card+.card{margin-left:calc(var(--rcw)*-.5)}
 .card{position:relative;width:var(--cw);height:calc(var(--cw)*1.42);background:linear-gradient(#fffdf6,#efe9d6);border-radius:calc(var(--cw)*.07);box-shadow:0 2px 5px rgba(0,0,0,.45);overflow:hidden;color:#111;flex:none;user-select:none;transition:transform .15s,box-shadow .15s,filter .15s}
 .card.red{color:#c4161c}
 .card svg{display:block;width:100%;height:100%;pointer-events:none}
@@ -69,27 +69,27 @@ button{font:inherit;cursor:pointer}
 .card .cm{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:calc(var(--cw)*.55);opacity:.92}
 .card.back{background:repeating-linear-gradient(45deg,#7a1f2b 0 6px,#5e1621 6px 12px);border:2px solid #f3efe0;box-shadow:0 2px 5px rgba(0,0,0,.45),inset 0 0 0 2px #c9922e}
 .card.back *{display:none}
-#hand{--cw:calc(var(--base)*1.22);display:flex;justify-content:center;padding:18px 8px 2px;min-height:calc(var(--cw)*1.42 + 20px)}
+#hand{--cw:var(--hcw);display:flex;justify-content:center;padding:22px 8px 2px;min-height:calc(var(--cw)*1.42 + 20px)}
 #hand .card.ok{cursor:pointer;transform:translateY(-8px);box-shadow:0 0 0 2px var(--gold),0 6px 12px rgba(0,0,0,.5)}
 #hand .card.ok:hover{transform:translateY(-16px)}
-#hand .card.dim{filter:brightness(.55)}
+#hand .card.dim{filter:brightness(.68) saturate(.85)}
 #hand .card.sel{transform:translateY(-18px);box-shadow:0 0 0 3px #ff6a4d}
 #hand .card.newc{box-shadow:0 0 0 3px #5ee08a}
 #hand .card.hint,.rev .card.hint{box-shadow:0 0 0 4px #6ab7ff,0 0 16px #6ab7ff;transform:translateY(-14px)}
 .rev .card.ok{cursor:pointer;box-shadow:0 0 0 2px var(--gold)}
-.rev .card.dim{filter:brightness(.55)}
-#status{text-align:center;font-size:13px;min-height:20px;padding:2px 8px;color:#f6e7b4}
+.rev .card.dim{filter:brightness(.68) saturate(.85)}
+#status{text-align:center;font-size:13px;min-height:20px;padding:2px 8px;color:#d9ceab}
 #info{font-size:12px;background:rgba(0,0,0,.35);border-radius:10px;padding:3px 10px;margin-bottom:4px;text-align:center}
 #info .big{font-size:18px;vertical-align:middle}
 .red{color:#ff5a5a}
-#trick{--cw:calc(var(--base)*1.12);position:relative;width:min(100%,calc(var(--cw)*3.6));height:calc(var(--cw)*1.42*2.1)}
+#trick{--cw:var(--tcw);position:relative;width:min(100%,calc(var(--cw)*3.6));height:calc(var(--cw)*1.42*2.1)}
 .slot{position:absolute}
 .slot.b{left:50%;bottom:0;transform:translateX(-50%)}
 .slot.t{left:50%;top:0;transform:translateX(-50%)}
 .slot.l{left:0;top:50%;transform:translateY(-50%) rotate(-7deg)}
 .slot.r{right:0;top:50%;transform:translateY(-50%) rotate(7deg)}
 .slot .card.new{animation:drop .28s ease-out}
-.slot.win .card{box-shadow:0 0 0 3px var(--gold),0 0 20px var(--gold)}
+.slot.win .card{box-shadow:0 0 0 3px var(--gold),0 0 12px rgba(216,184,106,.55)}
 @keyframes drop{from{opacity:0;transform:scale(1.3) translateY(30px)}to{opacity:1;transform:none}}
 #actions{position:absolute;left:50%;bottom:100%;transform:translateX(-50%);margin-bottom:4px;z-index:20;background:rgba(5,25,17,.95);border:1px solid var(--gold);border-radius:14px;padding:10px 14px;max-width:96%;text-align:center;display:none;box-shadow:0 8px 30px rgba(0,0,0,.6)}
 #actions .at{font-weight:700;margin-bottom:8px;color:var(--gold);font-size:14px}
@@ -124,8 +124,7 @@ th,td{border-bottom:1px solid #22503b;padding:4px 6px;text-align:center}
 th{color:var(--gold)}
 td.pos{color:#7ee2a0}td.neg{color:#ff8a8a}
 .row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
-@media(max-height:520px){:root{--base:clamp(34px,8.4vh,60px)}#hand{padding-top:12px}}
-@media(max-width:560px){#hand{--cw:calc(var(--base)*1.2)}#trick{--cw:calc(var(--base)*.98)}}
+@media(max-height:520px){:root{--base:clamp(30px,6.5vh,46px);--tcw:clamp(38px,10vh,56px);--hcw:clamp(48px,15vh,78px);--rcw:clamp(26px,6.5vh,38px)}#hand{padding-top:12px}}
 @media(max-width:560px){#table{grid-template-columns:minmax(0,1.15fr) minmax(0,1.7fr) minmax(0,1.15fr)}header h1{display:none}.pbox .meta{display:none}.pbox .av{font-size:16px}.pbox{padding:2px 6px;gap:4px}.pbox .nm{font-size:11px}#status{font-size:12px}}
 </style>
 </head>
@@ -177,9 +176,11 @@ td.pos{color:#7ee2a0}td.neg{color:#ff8a8a}
 <h3>Üçlü Gömmeli</h3>
 <p>3 kişi, 16'şar kart ve yerde 4 kart <b>gömü</b>. İhale 6–16. İhaleyi alan önce elinden istediği 4 kartı kapalı indirir, sonra yerdeki 4 kartı alır (herkes görür) ve kozu seçer. Puanlama tekli ile aynıdır.</p>
 <h3>3-5-8</h3>
-<p>3 kişi, 16'şar kart ve yerde 4 kart, ihale yok. Her elde hedefler sabittir: dağıtıcının solundaki <b>8</b>, sonraki <b>5</b>, dağıtıcı <b>3</b> el almalıdır; hedefler her el kayar. 8 hedefli oyuncu önce elinden 4 kart indirir, sonra yerdeki 4 kartı alır, kozu seçer ve ilk eli açar.</p>
+<p>3 kişi, 16'şar kart ve yerde 4 kart, ihale yok. Hedefler <b>8</b>, <b>5</b> ve <b>3</b> el'dir. 8 hedefli oyuncu (ihaleci) ilk dağıtımda <b>karo 2</b>'nin geldiği kişidir; karo 2 yerdeyse karo 3'ün, o da yerdeyse karo 4'ün geldiği kişi olur. Sonraki ellerde ihale sırayla bir sonraki oyuncuya geçer (8 → 5 → 3 hedefleri de onunla kayar); 4 el bitince durum başa döner (yine karo 2 kuralı) ve <b>5. elde kart değişimi sıfırlanır</b> (değişim yapılmaz). İhaleci ihaleyi söyledikten sonra önce elinden 4 kart indirir, sonra yerdeki 4 kartı alır, kozu seçer ve ilk eli açar.</p>
 <p><b>Puan:</b> herkes aldığı el eksi hedefi kadar yazar. Hedefinden fazla alan artı yazar (5 olması gerekirken 6 aldıysa +1), eksik alan eksi yazar (8 hedefliyken 6 aldıysa −2). Hedefini tam tutturan 0 yazar.</p>
 <p><b>Kart değişimi (bir sonraki elin başında):</b> fazla aldığı el kadar kart değiştirme hakkı doğar. Artı alan oyuncu eksi alana elinden istediği kartı verir; eksi alan, o renkteki en üst kartını geri verir (kupa 2 verildi, eksi alanda kupa As varsa onu verir). Eksi alan, kaç eksiyse o kadar kartı rakiplerine vermiş olur. O renkte kartı yoksa değişim olmaz.</p>
+<h3>Batma ve Çiz (tekli / eşli)</h3>
+<p><b>Batma:</b> eşlide 0 ya da 1 el alan oyuncunun takımı batar, tekli'de 0 el alan oyuncu batar; batan <b>ihale kadar eksi</b> yazar (menüden kapatılabilir). <b>Çiz:</b> ihalede 13 diyen "Çiz" demiş olur. 13 elin hepsini alırsa oyun hemen biter ve kazanır; alamazsa karşı taraf oyunu kazanır (tekli'de diğer oyuncuların en yüksek puanlısı).</p>
 <h3>Kahveci</h3>
 <p>Arada kahveci "Ne içersiniz?" diye sorar; seçtiğin içecek (çay, kivi, nane limon, zahter, portakal, kuşburnu) tulip bardakta, rengine göre gelir. Botlar da içecek alır. Bardaklar her elde biraz azalır; hepsi bitince kahveci 3-4 el bekler, sonra yeniden sorar. Her içecek <b>10 TL</b>'dir; oyun sonunda toplam hesabı en düşük puanlı (kaybeden) öder. Menüden kapatılabilir.</p>
 <h3>Oyun sonu</h3>
@@ -236,6 +237,17 @@ function dealCards(G){
   G.asked=false;G.askedByPartner=false;G.humanSaid=null;G.talk={};
   G.phase='deal';G.turn=(G.dealer+1)%n;G.dead=[];G.newIds=[];G.winSeat=-1;G.lastPlayed=-1;
   if(G.M.team)G.broken=true;
+  if(G.mode==='s358'){
+    if((G.dealNo-1)%4===0){
+      let who=-1,rank=0;const onFloor=[];
+      for(let r=2;r<=14&&who<0;r++){
+        const sx=G.hands.findIndex(h=>h.includes(2*15+r));
+        if(sx>=0){who=sx;rank=r;}else onFloor.push(r);
+      }
+      G.s358={decl:who,reset:true,rank,onFloor};
+    }else G.s358={decl:(G.s358.decl+1)%3,reset:false};
+    G.dealer=(G.s358.decl+2)%3;
+  }
 }
 function friendly(S,a,b){
   if(a===b)return true;
@@ -402,8 +414,10 @@ async function afterBid(G,ui){
 }
 async function setup358(G,ui){
   const n=3;G.targets=new Array(n);
-  G.targets[(G.dealer+1)%n]=8;G.targets[(G.dealer+2)%n]=5;G.targets[G.dealer]=3;
-  G.decl=(G.dealer+1)%n;G.bid=8;G.phase='trump';ui.render();
+  const D=G.s358.decl;
+  G.targets[D]=8;G.targets[(D+1)%n]=5;G.targets[(D+2)%n]=3;
+  G.decl=D;G.bid=8;G.phase='trump';ui.render();
+  if(G.s358.reset&&ui.cycleNotice){await ui.cycleNotice(G);chk(G);}
   await buryAndTrump(G,ui);
   chk(G);G.turn=G.decl;G.phase='play';
 }
@@ -577,24 +591,33 @@ async function playTricks(G,ui){
   }
 }
 function scoreDeal(G){
-  const M=G.M,W=G.won,d=G.decl;const delta=new Array(G.scores.length).fill(0);let made=true;
+  const M=G.M,W=G.won,d=G.decl;const delta=new Array(G.scores.length).fill(0);let made=true;const bust=[];
   if(G.mode==='s358'){
     for(let s=0;s<3;s++){delta[s]=W[s]-G.targets[s];}
   }else if(M.team){
     const dt=W[d]+W[(d+2)%4];made=dt>=G.bid;const td=d%2,to=1-td;
     delta[td]=made?dt:-G.bid;delta[to]=W[to]+W[to+2];
+    if(G.cfg.bust)for(let t=0;t<2;t++)if(W[t]<=1||W[t+2]<=1){delta[t]=-G.bid;for(const q of [t,t+2])if(W[q]<=1)bust.push(q);}
   }else{
     made=W[d]>=G.bid;
     for(let s=0;s<G.n;s++)delta[s]=s===d?(made?W[d]:-G.bid):W[s];
+    if(G.cfg.bust)for(let s=0;s<G.n;s++)if(s!==d&&W[s]===0){delta[s]=-G.bid;bust.push(s);}
   }
   G.lastDelta=delta.slice();
   for(let i=0;i<delta.length;i++)G.scores[i]+=delta[i];
-  const row={no:G.dealNo,decl:d,bid:G.bid,trump:G.trump,won:W.slice(),delta,made,targets:G.targets};
+  const row={no:G.dealNo,decl:d,bid:G.bid,trump:G.trump,won:W.slice(),delta,made,targets:G.targets,bust};
   G.history.push(row);
   const T=G.cfg.target,mx=Math.max(...G.scores);
   if(mx>=T||G.dealNo>=60){
     const ls=G.scores.map((s,i)=>s===mx?i:-1).filter(i=>i>=0);
     if(ls.length===1){G.over=true;G.winner=ls[0];}
+  }
+  if(G.bid===13&&(G.mode==='tekli'||G.mode==='esli')){
+    const ok=M.team?(W[d]+W[(d+2)%4])>=13:W[d]>=13;
+    G.over=true;row.ciz=ok?'tuttu':'battı';
+    if(M.team)G.winner=ok?d%2:1-d%2;
+    else if(ok)G.winner=d;
+    else{let best=-1,bv=-1e9;for(let s=0;s<G.n;s++)if(s!==d&&G.scores[s]>bv){bv=G.scores[s];best=s;}G.winner=best;}
   }
   return row;
 }
@@ -679,7 +702,7 @@ async function runGame(G,ui){
     while(!G.over){
       G.dealNo++;dealCards(G);ui.render();await ui.sleep(500);chk(G);
       await cafeTurn(G,ui);
-      if(G.mode==='s358'&&G.dealNo>1)await doExchange(G,ui);
+      if(G.mode==='s358'&&(G.dealNo-1)%4!==0)await doExchange(G,ui);
       if(G.mode==='s358')await setup358(G,ui);else{await doBidding(G,ui);await afterBid(G,ui);}
       await playTricks(G,ui);
       const row=scoreDeal(G);
@@ -692,7 +715,7 @@ async function runGame(G,ui){
 
 /*UI*/
 const $=id=>document.getElementById(id);
-const defaults={mode:'tekli',level:'zor',target:51,trumpMode:'spade',dummy:true,speed:1,exch:'points',help:false,cafe:true,names:['','','','']};
+const defaults={mode:'tekli',level:'zor',target:51,trumpMode:'spade',dummy:true,speed:1,exch:'points',help:false,cafe:true,bust:true,names:['','','','']};
 let cfg=Object.assign({},defaults);
 try{cfg=Object.assign(cfg,JSON.parse(localStorage.getItem('batakCfg')||'{}'));}catch(e){}
 if(!Array.isArray(cfg.names))cfg.names=['','','',''];
@@ -804,7 +827,7 @@ function glassHTML(seat,cls){
 }
 function buildDefs(){
   let d='<defs>';
-  d+=`<linearGradient id="paper" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fffaf0"/><stop offset="1" stop-color="#eddfb8"/></linearGradient>`;
+  d+=`<linearGradient id="paper" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f9f2e0"/><stop offset="1" stop-color="#e7dbbf"/></linearGradient>`;
   d+=`<clipPath id="gclip"><path d="${GLASSP}"/></clipPath>`;
   d+=`<linearGradient id="blade" x1="0" x2="1"><stop offset="0" stop-color="#c9c19c"/><stop offset=".5" stop-color="#fbf6dc"/><stop offset="1" stop-color="#b3aa80"/></linearGradient>`;
   d+=`<clipPath id="bodyclip"><path d="${BODY}"/></clipPath>`;
@@ -830,7 +853,7 @@ function faceSVG(c){
   v+=`<rect x="3.4" y="3.4" width="93.2" height="135.2" rx="4.6" fill="none" stroke="${GOLD}" stroke-width="1.1"/>`;
   v+=`<rect x="5.2" y="5.2" width="89.6" height="131.6" rx="3.4" fill="none" stroke="${BRN}" stroke-width=".4"/>`;
   for(const [x,y] of [[8,8],[92,8],[8,134],[92,134]])v+=`<circle cx="${x}" cy="${y}" r="1" fill="${GOLD}"/>`;
-  v+=`<rect x="22" y="7" width="56" height="128" fill="#fbf4de" stroke="${BRN}" stroke-width=".7"/><rect x="23.4" y="8.4" width="53.2" height="125.2" fill="none" stroke="${GOLD}" stroke-width=".5"/>`;
+  v+=`<rect x="22" y="7" width="56" height="128" fill="#f4ecd6" stroke="${BRN}" stroke-width=".7"/><rect x="23.4" y="8.4" width="53.2" height="125.2" fill="none" stroke="${GOLD}" stroke-width=".5"/>`;
   const idx=`<text x="12.5" y="21" font-size="${r===10?14:21}" font-weight="700" letter-spacing="${r===10?-.6:0}" text-anchor="middle" fill="${col}" font-family="Georgia,'Times New Roman',serif">${rk}</text><use href="#sp${s}" x="6.5" y="25" width="12" height="12" fill="${col}"/>`;
   v+=idx+`<g transform="rotate(180 50 71)">${idx}</g>`;
   if(r>=11&&r<=13){
@@ -873,7 +896,7 @@ const ui={
       pending={type:'bid'};
       const lo=Math.max(min,high+1);
       let h=`<div class="at">İhale — kaç el alırsın?${high?` <small>(en yüksek: ${high})</small>`:''}</div><div class="bgrid">`;
-      for(let b=lo;b<=max;b++)h+=`<button class="btn" data-b="${b}">${b}</button>`;
+      for(let b=lo;b<=max;b++)h+=(b===13&&(G.mode==='tekli'||G.mode==='esli'))?`<button class="btn gold" data-b="13" title="13 elin hepsi: tutarsa oyun biter, battıysa karşı taraf kazanır">Çiz 13</button>`:`<button class="btn" data-b="${b}">${b}</button>`;
       h+=`<button class="btn pass" data-b="0">Pas</button></div>`;
       const canAsk=G.cfg.help&&G.M.team&&!G.asked;
       if(canAsk)h+=`<button class="btn" id="askP">🗣 Eşine sor: "Elin nasıl ortak?"</button>`;
@@ -916,6 +939,14 @@ const ui={
     });
   },
   name(seat){return seatName(seat);},
+  cycleNotice(G){
+    return new Promise(res=>{
+      const c=G.s358,nm=seatName(c.decl);
+      const fl=c.onFloor.length?`Karo ${c.onFloor.map(rankName).join(', ')} yerde, `:'';
+      const a=showActions(`<div class="at">♦ İhaleci belirleniyor</div><div class="small">${fl}<b>♦${rankName(c.rank)}</b> ${nm} tarafında</div><div class="small">→ <b>8 hedefli: ${nm}</b> (bu turun ilk eli; sonraki eller sırayla bir sonraki oyuncuya geçer)</div><button class="btn gold" id="cyOk">Tamam</button>`);
+      $('cyOk').onclick=()=>{hideActions();res();};
+    });
+  },
   cafeOrder(G){
     return new Promise(res=>{
       pending={type:'cafe'};
@@ -995,6 +1026,8 @@ function resultHTML(G,row){
     h+='</table>';
   }else{
     h+=`<p>İhale: <b>${seatName(row.decl)}</b> — ${row.bid} el, koz ${suitHtml(row.trump)} → <b class="${row.made?'':'red'}">${row.made?'TUTTU ✔':'BATTI ✘'}</b></p>`;
+    if(row.ciz)h+=`<p>🎯 <b>ÇİZ ${row.ciz.toUpperCase()}</b> — oyun bitti.</p>`;
+    if(row.bust&&row.bust.length)h+=`<p>💥 Battı (ihale kadar eksi): <b>${row.bust.map(seatName).join(', ')}</b></p>`;
     h+='<table><tr><th>Oyuncu</th><th>Alınan el</th></tr>';
     for(let s=0;s<G.n;s++)h+=`<tr><td>${seatName(s)}${s===row.decl?' 👑':''}</td><td>${row.won[s]}</td></tr>`;
     h+='</table><h3>Puan değişimi</h3><table><tr>'+names.map(n=>`<th>${n}</th>`).join('')+'</tr><tr>'+
@@ -1062,7 +1095,7 @@ function renderSeat(seat){
   if(tk==='ask')bub.textContent='💬 Elin nasıl ortak?';
   else if(tk==='think')bub.textContent='💬 …';
   else if(tk&&SAYS[tk]&&G.phase==='bid'&&G.bids[seat]==null)bub.textContent='💬 '+SAYS[tk];
-  else if(G.phase==='bid'&&G.bids[seat]!=null)bub.textContent=G.bids[seat]==='pas'?'Pas':G.bids[seat]+' el';
+  else if(G.phase==='bid'&&G.bids[seat]!=null)bub.textContent=G.bids[seat]==='pas'?'Pas':(G.bids[seat]===13&&!G.M.gomu?'ÇİZ! (13)':G.bids[seat]+' el');
   el.appendChild(seatBox(seat));el.appendChild(bub);
   const h=G.hands[seat];
   if(G.dummy===seat&&seat!==G.human){
@@ -1099,7 +1132,7 @@ function renderMe(){
   const kids=box.children;
   if(kids.length>1){
     const cw=kids[0].offsetWidth||60,avail=box.clientWidth-16;
-    const step=Math.min(cw*0.46,(avail-cw)/(kids.length-1));
+    const step=Math.min(cw*0.5,(avail-cw)/(kids.length-1));
     for(let i=1;i<kids.length;i++)kids[i].style.marginLeft=(step-cw)+'px';
   }
 }
@@ -1179,6 +1212,7 @@ function openMenu(){
   if(m.mode==='tekli'||m.mode==='esli')h+='<h3>Koz</h3><div class="opts">'+optBtn('trumpMode','spade','Maça sabit')+optBtn('trumpMode','choose','İhaleci seçer')+'</div>';
   if(m.mode==='esli')h+='<h3>Eşli ayarı</h3><div class="opts">'+optBtn('dummy',true,'Açık eş','ihaleden sonra eş eli açar, kartı ihaleci oynar')+optBtn('dummy',false,'Kapalı','klasik, herkes kendi elini oynar')+'</div>';
   if(m.mode==='esli')h+='<h3>Eş yardımı</h3><div class="opts">'+optBtn('help',true,'Açık','ihaleden önce eşinle elin hakkında konuşursun')+optBtn('help',false,'Kapalı')+'</div>';
+  if(m.mode==='tekli'||m.mode==='esli')h+='<h3>Batma kuralı</h3><div class="opts">'+optBtn('bust',true,'Açık',m.mode==='esli'?'0 ya da 1 el alan batar, ihale kadar eksi':'0 el alan batar, ihale kadar eksi')+optBtn('bust',false,'Kapalı')+'</div>';
   h+='<h3>Kahveci</h3><div class="opts">'+optBtn('cafe',true,'Açık','arada içecek sorar, oyun sonunda kaybeden öder')+optBtn('cafe',false,'Kapalı')+'</div>';
   h+='<h3>Hız</h3><div class="opts">'+optBtn('speed',1.6,'Yavaş')+optBtn('speed',1,'Normal')+optBtn('speed',0.45,'Hızlı')+'</div>';
   h+='<div class="row"><button class="btn" id="mRulesBtn">Kurallar</button><button class="btn gold" id="mStart">▶ Oyunu Başlat</button></div>';
@@ -1186,7 +1220,7 @@ function openMenu(){
   $('mMenu').classList.add('show');
   $('menuBox').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
     let v=b.dataset.v;const g=b.dataset.g;
-    if(g==='target'||g==='speed')v=+v;else if(g==='dummy'||g==='help'||g==='cafe')v=v==='true';
+    if(g==='target'||g==='speed')v=+v;else if(g==='dummy'||g==='help'||g==='cafe'||g==='bust')v=v==='true';
     cfg[g]=v;
     if(g==='mode'){if(v==='s358'&&cfg.target>30)cfg.target=12;if(v!=='s358'&&cfg.target<30)cfg.target=51;}
     openMenu();
