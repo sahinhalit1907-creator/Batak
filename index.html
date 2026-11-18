@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Batak Ustası</title>
+<style>
+:root{--base:clamp(54px,min(11.5vw,13.5vh),122px);--cw:var(--base);--ch:calc(var(--cw)*1.42);--gold:#e8c26b}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:#06241a;color:#f3efe0;font-family:'Segoe UI',system-ui,Roboto,sans-serif;overflow:hidden}
+#app{display:flex;flex-direction:column;height:100dvh}
+header{display:flex;gap:8px;align-items:center;padding:3px 8px;position:relative;z-index:40;background:linear-gradient(#0b1f17,#08170f);border-bottom:1px solid #2b5a43;flex-wrap:wrap}
+header h1{font-size:14px;margin:0;color:var(--gold);letter-spacing:.5px;white-space:nowrap}
+#scorebar{display:flex;gap:6px;flex:1;overflow:auto;font-size:12px;min-width:0;scrollbar-width:none}
+#live{display:none;justify-content:center;gap:6px;flex-wrap:wrap;padding:3px 8px;background:#071a12;border-bottom:1px solid #1d4633;font-size:12.5px}
+#live .chip{padding:2px 10px}
+#live .chip.tgt{border-color:var(--gold)}
+#live .chip.done{background:#1f6a3f;border-color:#5ee08a}
+#live .chip small{opacity:.8;font-weight:400}
+#moreWrap{position:relative}
+#bMore{font-size:18px;line-height:1;padding:3px 11px}
+#drop{display:none;position:absolute;right:0;top:100%;margin-top:6px;flex-direction:column;gap:6px;background:rgba(5,25,17,.97);border:1px solid var(--gold);border-radius:12px;padding:8px;box-shadow:0 10px 30px rgba(0,0,0,.6);min-width:150px}
+#drop.open{display:flex}
+#drop .btn{text-align:left;white-space:nowrap}
+.chip{padding:3px 9px;border-radius:12px;background:#143a2b;border:1px solid #2b5a43;white-space:nowrap}
+.chip b{color:var(--gold)}
+.chip.me{border-color:var(--gold)}
+button{font:inherit;cursor:pointer}
+.btn{background:#1b4d38;color:#f3efe0;border:1px solid #3c8a63;border-radius:8px;padding:6px 11px;font-size:13px}
+.btn:hover{background:#23684a}
+.btn:disabled{opacity:.4;cursor:default}
+.btn.gold{background:linear-gradient(#f3d27d,#caa043);color:#3a2a00;border-color:#f3d27d;font-weight:700}
+.btn.pass{background:#5b2a2a;border-color:#a55}
+.btn.suit{font-size:24px;padding:4px 14px;background:#f6f1e0;color:#111;border-color:#b9b19a}
+.btn.suit.r{color:#c4161c}
+.btn.suit.on{outline:3px solid var(--gold)}
+#table{flex:1;min-height:0;position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2.3fr) minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto;overflow:hidden;background:radial-gradient(ellipse at center,#12714a 0%,#0c4a31 55%,#073021 100%)}
+.seat{overflow:visible;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:4px;min-width:0}
+#p-t{grid-column:1/4;grid-row:1}
+#p-l{grid-column:1;grid-row:2}
+#p-r{grid-column:3;grid-row:2}
+#center{grid-column:2;grid-row:2;overflow:hidden;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:0}
+#bottom{grid-column:1/4;grid-row:3;position:relative;padding-bottom:6px}
+.pbox{display:flex;align-items:center;gap:6px;background:rgba(0,0,0,.35);border:2px solid transparent;border-radius:12px;padding:4px 9px;font-size:12px;max-width:100%}
+.pbox.turn{border-color:var(--gold);box-shadow:0 0 14px rgba(232,194,107,.7)}
+.pbox .av{font-size:22px}
+.pbox .nm{font-weight:700;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pbox .meta{font-size:11px;opacity:.9}
+.tag{display:inline-block;padding:0 6px;border-radius:8px;background:#2b5a43;margin-right:3px;font-size:11px}
+.tag.g{background:var(--gold);color:#3a2a00;font-weight:700}
+.tag.r{background:#8b2b2b}
+.bub{min-height:20px;font-size:13px;font-weight:700;color:var(--gold);text-shadow:0 1px 2px #000}
+.stk{display:flex}
+.stk.v{flex-direction:column}
+.stk .card.back{--cw:calc(var(--base)*.62)}
+.stk:not(.v) .card.back+.card.back{margin-left:calc(var(--base)*-.4)}
+.stk.v .card.back+.card.back{margin-top:calc(var(--base)*-.7)}
+.rev{display:flex;flex-wrap:wrap;gap:3px 0;justify-content:center;max-width:100%}
+.rev .card{--cw:calc(var(--base)*.52)}
+.rev{flex-direction:column;flex-wrap:nowrap;gap:3px;align-items:center}
+.rev.l{align-items:flex-start}.rev.r{align-items:flex-end}
+.rev .rr{display:flex}
+.rev .rr .card+.card{margin-left:calc(var(--base)*-.3)}
+.card{position:relative;width:var(--cw);height:calc(var(--cw)*1.42);background:linear-gradient(#fffdf6,#efe9d6);border-radius:calc(var(--cw)*.07);box-shadow:0 2px 5px rgba(0,0,0,.45);overflow:hidden;color:#111;flex:none;user-select:none;transition:transform .15s,box-shadow .15s,filter .15s}
+.card.red{color:#c4161c}
+.card svg{display:block;width:100%;height:100%;pointer-events:none}
+.card .cr{position:absolute;left:4px;top:2px;font-size:calc(var(--cw)*.27);line-height:1;font-weight:700;text-align:center}
+.card .cr.br{left:auto;right:4px;top:auto;bottom:2px;transform:rotate(180deg)}
+.card .cm{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:calc(var(--cw)*.55);opacity:.92}
+.card.back{background:repeating-linear-gradient(45deg,#7a1f2b 0 6px,#5e1621 6px 12px);border:2px solid #f3efe0;box-shadow:0 2px 5px rgba(0,0,0,.45),inset 0 0 0 2px #c9922e}
+.card.back *{display:none}
+#hand{--cw:calc(var(--base)*1.22);display:flex;justify-content:center;padding:18px 8px 2px;min-height:calc(var(--cw)*1.42 + 20px)}
+#hand .card.ok{cursor:pointer;transform:translateY(-8px);box-shadow:0 0 0 2px var(--gold),0 6px 12px rgba(0,0,0,.5)}
+#hand .card.ok:hover{transform:translateY(-16px)}
+#hand .card.dim{filter:brightness(.55)}
+#hand .card.sel{transform:translateY(-18px);box-shadow:0 0 0 3px #ff6a4d}
+#hand .card.newc{box-shadow:0 0 0 3px #5ee08a}
+#hand .card.hint,.rev .card.hint{box-shadow:0 0 0 4px #6ab7ff,0 0 16px #6ab7ff;transform:translateY(-14px)}
+.rev .card.ok{cursor:pointer;box-shadow:0 0 0 2px var(--gold)}
+.rev .card.dim{filter:brightness(.55)}
+#status{text-align:center;font-size:13px;min-height:20px;padding:2px 8px;color:#f6e7b4}
+#info{font-size:12px;background:rgba(0,0,0,.35);border-radius:10px;padding:3px 10px;margin-bottom:4px;text-align:center}
+#info .big{font-size:18px;vertical-align:middle}
+.red{color:#ff5a5a}
+#trick{--cw:calc(var(--base)*1.12);position:relative;width:min(100%,calc(var(--cw)*3.6));height:calc(var(--cw)*1.42*2.1)}
+.slot{position:absolute}
+.slot.b{left:50%;bottom:0;transform:translateX(-50%)}
+.slot.t{left:50%;top:0;transform:translateX(-50%)}
+.slot.l{left:0;top:50%;transform:translateY(-50%) rotate(-7deg)}
+.slot.r{right:0;top:50%;transform:translateY(-50%) rotate(7deg)}
+.slot .card.new{animation:drop .28s ease-out}
+.slot.win .card{box-shadow:0 0 0 3px var(--gold),0 0 20px var(--gold)}
+@keyframes drop{from{opacity:0;transform:scale(1.3) translateY(30px)}to{opacity:1;transform:none}}
+#actions{position:absolute;left:50%;bottom:100%;transform:translateX(-50%);margin-bottom:4px;z-index:20;background:rgba(5,25,17,.95);border:1px solid var(--gold);border-radius:14px;padding:10px 14px;max-width:96%;text-align:center;display:none;box-shadow:0 8px 30px rgba(0,0,0,.6)}
+#actions .at{font-weight:700;margin-bottom:8px;color:var(--gold);font-size:14px}
+.bgrid{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:6px}
+.bgrid .btn{min-width:42px;font-size:15px}
+.small{font-size:12px;opacity:.85;margin-bottom:6px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:50;padding:10px}
+.modal.show{display:flex}
+.mbox{background:#0d2a1f;border:1px solid var(--gold);border-radius:16px;max-width:600px;width:100%;max-height:94vh;overflow:auto;padding:16px 18px}
+.mbox h2{margin:0 0 10px;color:var(--gold);font-size:20px}
+.mbox h3{margin:14px 0 6px;font-size:14px;color:#cfe9d8}
+.mbox p,.mbox li{font-size:13px;line-height:1.5}
+.exrow{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.exrow .exn{min-width:130px;font-size:13px}.exc{--cw:46px;font-size:12px;opacity:.9}
+.nmrow{display:flex;gap:8px;flex-wrap:wrap}.nmf{display:flex;flex-direction:column;gap:3px;font-size:11px;opacity:.95;flex:1;min-width:110px}.nm-in{background:#143a2b;border:1px solid #2b5a43;border-radius:8px;color:#f3efe0;padding:7px 9px;font:inherit;font-size:13px}.nm-in:focus{outline:2px solid var(--gold)}
+.opts{display:flex;flex-wrap:wrap;gap:6px}
+.opt{padding:7px 12px;border-radius:10px;background:#143a2b;border:1px solid #2b5a43;color:#f3efe0;font-size:13px}
+.opt.on{background:var(--gold);color:#3a2a00;border-color:var(--gold);font-weight:700}
+.opt small{display:block;font-weight:400;opacity:.8;font-size:11px}
+table{border-collapse:collapse;width:100%;font-size:12px}
+th,td{border-bottom:1px solid #22503b;padding:4px 6px;text-align:center}
+th{color:var(--gold)}
+td.pos{color:#7ee2a0}td.neg{color:#ff8a8a}
+.row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}
+@media(max-height:520px){:root{--base:clamp(34px,8.4vh,60px)}#hand{padding-top:12px}}
+@media(max-width:560px){#hand{--cw:calc(var(--base)*1.2)}#trick{--cw:calc(var(--base)*.98)}}
+@media(max-width:560px){#table{grid-template-columns:minmax(0,1.15fr) minmax(0,1.7fr) minmax(0,1.15fr)}header h1{display:none}.pbox .meta{display:none}.pbox .av{font-size:16px}.pbox{padding:2px 6px;gap:4px}.pbox .nm{font-size:11px}#status{font-size:12px}}
+</style>
+</head>
+<body>
+<div id="app">
+<header>
+  <h1>♠ BATAK USTASI</h1>
+  <div id="scorebar"></div>
+  <div id="moreWrap">
+    <button class="btn" id="bMore" aria-label="Menü">⋯</button>
+    <div id="drop">
+      <button class="btn" id="bHint">💡 İpucu</button>
+      <button class="btn" id="bScore">📊 Skor</button>
+      <button class="btn" id="bRules">📖 Kurallar</button>
+      <button class="btn" id="bNew">⚙ Yeni Oyun</button>
+    </div>
+  </div>
+</header>
+<div id="live"></div>
+<div id="table">
+  <div class="seat" id="p-t"></div>
+  <div class="seat" id="p-l"></div>
+  <div id="center"><div id="info"></div><div id="trick"></div></div>
+  <div class="seat" id="p-r"></div>
+  <div id="bottom">
+    <div id="actions"></div>
+    <div id="status"></div>
+    <div id="hand"></div>
+  </div>
+</div>
+</div>
+
+<div class="modal" id="mMenu"><div class="mbox" id="menuBox"></div></div>
+<div class="modal" id="mRules"><div class="mbox">
+<h2>Kurallar</h2>
+<h3>Genel</h3>
+<ul>
+<li>Oyun <b>saat yönünün tersine</b> oynanır (sen → sağındaki → karşındaki → solundaki).</li>
+<li>Açılan renge uymak zorunlusun; uyamıyorsan <b>koz atmak zorundasın</b>.</li>
+<li>Yerdeki en büyük karttan büyüğü elindeyse <b>üstüne atmak zorundasın</b> (koz ezildiyse daha büyük kozla ezmek de zorunlu; yoksa istediğini atarsın).</li>
+<li>Eşli dışındaki türlerde koz, daha önce hiç koz oynanmadıysa elde başka kart varken ilk elde açılamaz.</li>
+<li>Kartlar: A en büyük, sonra K, Q, J, 10 … 2.</li>
+</ul>
+<h3>Tekli Batak</h3>
+<p>4 kişi, 13'er kart, herkes kendi başına. İhale 5–13 el arasındadır; ihaleyi alan ilk eli açar. Herkes sırayla yüksek teklif verir ya da pas der. Dağıtıcıdan başka herkes pas derse dağıtıcı 5'e mecbur kalır. İhaleci tutturursa <b>aldığı el kadar</b> puan yazar (ihale kadar değil), tutturamazsa −ihale puanı alır; diğerleri aldıkları el kadar puan yazar. Koz ayarlardan seçilir: <i>Maça sabit</i> ya da <i>ihaleci seçer</i>.</p>
+<h3>Eşli Batak</h3>
+<p>İhale <b>8'den</b> başlar (en çok 13); kimse ihaleye girmezse dağıtıcı <b>7</b> ile kalır. Koz her zaman oynanabilir (koz açma yasağı yoktur). Tekli ile aynı, ancak karşılıklı oturan oyuncular eştir (sen ve karşındaki). İhaleci takımın iki oyuncusunun aldığı eller toplanır; toplam ihaleye ulaşırsa takım <b>aldığı el kadar</b> puan yazar, ulaşamazsa −ihale alır; rakip takım her durumda aldığı eli yazar. (Örnek: 8 ihale, 9 alındı → 9 / 4. 9 ihale, 8 alındı → −9 / 5.) <b>Eş yardımı</b> açıksa ihale sırasında eşine "Elin nasıl ortak?" diye sorabilirsin; eşin elinin gücüne göre <i>iyi / orta / kötü</i> der. Eşin de bazen sana sorar, sen de üç cevaptan birini seçersin ve eşin ihalesini buna göre ayarlar. <b>Açık eş</b> seçeneği açıkken ihaleyi alan takımda eş, eli <i>açar</i> (briç usulü): eşin kartları herkese açık yatar, kartlarını ihaleci karşıdan çeker/oynar. Sen ihaleciysen eşin kartlarına tıklayarak oynarsın; eşin ihaleciyse senin elin açılır ve onun için oynanır.</p>
+<h3>Üçlü Gömmeli</h3>
+<p>3 kişi, 16'şar kart ve yerde 4 kart <b>gömü</b>. İhale 6–16. İhaleyi alan önce elinden istediği 4 kartı kapalı indirir, sonra yerdeki 4 kartı alır (herkes görür) ve kozu seçer. Puanlama tekli ile aynıdır.</p>
+<h3>3-5-8</h3>
+<p>3 kişi, 16'şar kart ve yerde 4 kart, ihale yok. Her elde hedefler sabittir: dağıtıcının solundaki <b>8</b>, sonraki <b>5</b>, dağıtıcı <b>3</b> el almalıdır; hedefler her el kayar. 8 hedefli oyuncu önce elinden 4 kart indirir, sonra yerdeki 4 kartı alır, kozu seçer ve ilk eli açar.</p>
+<p><b>Puan:</b> herkes aldığı el eksi hedefi kadar yazar. Hedefinden fazla alan artı yazar (5 olması gerekirken 6 aldıysa +1), eksik alan eksi yazar (8 hedefliyken 6 aldıysa −2). Hedefini tam tutturan 0 yazar.</p>
+<p><b>Kart değişimi (bir sonraki elin başında):</b> fazla aldığı el kadar kart değiştirme hakkı doğar. Artı alan oyuncu eksi alana elinden istediği kartı verir; eksi alan, o renkteki en üst kartını geri verir (kupa 2 verildi, eksi alanda kupa As varsa onu verir). Eksi alan, kaç eksiyse o kadar kartı rakiplerine vermiş olur. O renkte kartı yoksa değişim olmaz.</p>
+<h3>Oyun sonu</h3>
+<p>Ayarlardaki hedef puana ilk ulaşan kazanır (3-5-8'de puanlar küçük olduğu için 8 / 12 / 16, diğer türlerde 31 / 51 / 101).</p>
+<h3>Botlar</h3>
+<p><b>Kolay:</b> acemi, hata yapar. <b>Orta:</b> temel strateji. <b>Zor:</b> kart sayar, boş renkleri takip eder, eşiyle uyumlu oynar. <b>Uzman:</b> zor seviyenin üstüne, gizli elleri tahmin edip yüzlerce olası dağılımda oyunu baştan sona simüle eder.</p>
+<div class="row"><button class="btn gold" data-close="mRules">Kapat</button></div>
+</div></div>
+<div class="modal" id="mExch"><div class="mbox" id="exchBox"></div></div>
+<div class="modal" id="mScore"><div class="mbox" id="scoreBox"></div></div>
+<div class="modal" id="mResult"><div class="mbox" id="resultBox"></div></div>
+
+<script>
+/*ENGINE*/
+const ABORT={abort:1};
+const SUITS=['♠','♥','♦','♣'],SUITN=['Maça','Kupa','Karo','Sinek'];
+const Sx=c=>(c/15)|0,Rx=c=>c%15;
+const RN={11:'J',12:'Q',13:'K',14:'A'};
+const rankName=r=>RN[r]||String(r);
+const ORD=[0,1,3,2];
+const sortHand=h=>h.sort((a,b)=>(ORD[Sx(a)]*20+(14-Rx(a)))-(ORD[Sx(b)]*20+(14-Rx(b))));
+const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+const newDeck=()=>{const d=[];for(let s=0;s<4;s++)for(let r=2;r<=14;r++)d.push(s*15+r);return d;};
+const cntSuit=(h,s)=>{let k=0;for(const c of h)if(Sx(c)===s)k++;return k;};
+const MODES={
+  tekli:{name:'Tekli Batak',n:4,cards:13,gomu:0,min:5,max:13,team:false,bidding:true},
+  esli:{name:'Eşli Batak',n:4,cards:13,gomu:0,min:8,forced:7,max:13,team:true,bidding:true},
+  gomme:{name:'Üçlü Gömmeli',n:3,cards:16,gomu:4,min:6,max:16,team:false,bidding:true},
+  s358:{name:'3-5-8',n:3,cards:16,gomu:4,min:0,max:0,team:false,bidding:false}
+};
+const LEVELS={
+  kolay:{id:'kolay',count:false,voids:false,rand:0.33,noise:18,bidBias:0.7,bidNoise:1.5},
+  orta:{id:'orta',count:false,voids:false,rand:0.07,noise:6,bidBias:0.15,bidNoise:0.9},
+  zor:{id:'zor',count:true,voids:true,rand:0,noise:1.5,bidBias:0,bidNoise:0.4},
+  uzman:{id:'uzman',count:true,voids:true,rand:0,noise:0.6,bidBias:-0.1,bidNoise:0.15,expert:true}
+};
+const LROLL={id:'roll',count:true,voids:true,rand:0,noise:0.9};
+
+function chk(G){if(G.aborted)throw ABORT;}
+function newGame(cfg){
+  const M=MODES[cfg.mode],n=M.n;
+  return {cfg,mode:cfg.mode,M,n,human:0,scores:new Array(M.team?2:n).fill(0),history:[],
+    dealer:Math.floor(Math.random()*n),dealNo:0,over:false,aborted:false,winner:-1,hands:null};
+}
+const scoreIdx=(G,seat)=>G.M.team?seat%2:seat;
+function dealCards(G){
+  const M=G.M,n=G.n,deck=shuffle(newDeck());
+  G.hands=[];
+  for(let i=0;i<n;i++)G.hands.push(sortHand(deck.slice(i*M.cards,(i+1)*M.cards)));
+  G.gomu=M.gomu?deck.slice(n*M.cards,n*M.cards+M.gomu):[];
+  G.trick=[];G.lastTrick=null;G.broken=false;G.played=new Uint8Array(60);
+  G.void=Array.from({length:n},()=>[0,0,0,0]);G.won=new Array(n).fill(0);
+  G.trump=-1;G.decl=-1;G.bid=0;G.dummy=-1;G.bids=new Array(n).fill(null);G.targets=null;
+  G.asked=false;G.askedByPartner=false;G.humanSaid=null;G.talk={};
+  G.phase='deal';G.turn=(G.dealer+1)%n;G.dead=[];G.newIds=[];G.winSeat=-1;G.lastPlayed=-1;
+  if(G.M.team)G.broken=true;
+}
+function friendly(S,a,b){
+  if(a===b)return true;
+  if(S.M.team)return a%2===b%2;
+  if(S.mode==='s358')return false;
+  return a!==S.decl&&b!==S.decl;
+}
+function beats(c,b,T){
+  const cs=Sx(c),bs=Sx(b);
+  if(cs===bs)return Rx(c)>Rx(b);
+  return cs===T;
+}
+function legalMoves(hand,trick,T,broken){
+  if(!trick.length){
+    if(!broken){const nt=hand.filter(c=>Sx(c)!==T);if(nt.length)return nt;}
+    return hand.slice();
+  }
+  const lead=Sx(trick[0][1]);let best=trick[0][1];
+  for(let i=1;i<trick.length;i++)if(beats(trick[i][1],best,T))best=trick[i][1];
+  const follow=hand.filter(c=>Sx(c)===lead);
+  if(follow.length){
+    if(Sx(best)===lead){const hi=follow.filter(c=>Rx(c)>Rx(best));return hi.length?hi:follow;}
+    return follow;
+  }
+  const tr=hand.filter(c=>Sx(c)===T);
+  if(tr.length){
+    if(Sx(best)===T){const hi=tr.filter(c=>Rx(c)>Rx(best));return hi.length?hi:hand.slice();}
+    return tr;
+  }
+  return hand.slice();
+}
+function playCard(S,seat,c){
+  const h=S.hands[seat];h.splice(h.indexOf(c),1);
+  if(S.trick.length&&Sx(c)!==Sx(S.trick[0][1]))S.void[seat][Sx(S.trick[0][1])]=1;
+  S.trick.push([seat,c]);S.played[c]=1;
+  if(Sx(c)===S.trump)S.broken=true;
+  if(S.trick.length===S.n){
+    let b=S.trick[0];
+    for(let i=1;i<S.n;i++)if(beats(S.trick[i][1],b[1],S.trump))b=S.trick[i];
+    S.won[b[0]]++;S.lastTrick=S.trick;S.trick=[];S.turn=b[0];return b[0];
+  }
+  S.turn=(seat+1)%S.n;return -1;
+}
+/* ---- hand evaluation ---- */
+function estimate(hand,T){
+  const by=[[],[],[],[]];for(const c of hand)by[Sx(c)].push(Rx(c));
+  let e=0;const t=by[T],tl=t.length,has=(a,r)=>a.includes(r);
+  if(has(t,14))e+=1;
+  if(has(t,13))e+=tl>=2?0.9:0.35;
+  if(has(t,12))e+=tl>=3?0.75:0.2;
+  if(has(t,11))e+=tl>=4?0.55:0.1;
+  if(has(t,10)&&tl>=5)e+=0.4;
+  if(tl>4)e+=(tl-4)*0.85;
+  for(let s=0;s<4;s++){
+    if(s===T)continue;const a=by[s],len=a.length;
+    if(has(a,14))e+=0.95;
+    if(has(a,13))e+=len>=2?(has(a,14)?0.85:0.5):0.2;
+    if(has(a,12)&&len>=3)e+=has(a,13)?0.5:0.25;
+    if(tl>=2){
+      if(len===0)e+=tl>=3?1.3:0.8;
+      else if(len===1&&!has(a,14)&&tl>=3)e+=0.5;
+      else if(len===2&&tl>=4&&!has(a,14))e+=0.2;
+    }
+  }
+  return e;
+}
+function botTrump(hand){
+  let bs=-1,bt=0;
+  for(let t=0;t<4;t++){const e=estimate(hand,t)+cntSuit(hand,t)*0.01;if(e>bs){bs=e;bt=t;}}
+  return bt;
+}
+function botDiscard(hand,T,k){
+  const h=hand.slice(),out=[];
+  for(let i=0;i<k;i++){
+    let bc=-1,bs=1e9;
+    for(const c of h){
+      const s=Sx(c),r=Rx(c),cnt=cntSuit(h,s);let v=r;
+      if(s===T)v+=60;
+      else{
+        if(r===14)v+=40;else if(r===13&&cnt>=2)v+=22;else if(r===12&&cnt>=3)v+=8;
+        if(cnt<=2&&r<12)v-=10-cnt*3;
+        if(cnt>=4)v+=6;
+      }
+      if(v<bs){bs=v;bc=c;}
+    }
+    out.push(bc);h.splice(h.indexOf(bc),1);
+  }
+  return out;
+}
+function bestEstimate(G,hand){
+  if(G.cfg.trumpMode==='spade'&&!G.M.gomu&&G.mode!=='s358')return estimate(hand,0);
+  let m=0;for(let t=0;t<4;t++)m=Math.max(m,estimate(hand,t));return m;
+}
+function rateHand(G,seat){
+  const spade=G.cfg.trumpMode==='spade';
+  const [lo,hi]=spade?[1.9,3.3]:[2.9,4.5];
+  const L=LEVELS[G.cfg.level];
+  const e=bestEstimate(G,G.hands[seat])+(Math.random()*2-1)*(L.id==='kolay'?0.5:L.id==='orta'?0.25:0);
+  return e>=hi?'iyi':e>=lo?'orta':'kötü';
+}
+const SAYS={iyi:'Elim iyi',orta:'Elim orta','kötü':'Elim kötü'};
+function botBid(G,seat,high,curBidder){
+  const L=LEVELS[G.cfg.level],M=G.M;
+  const e=bestEstimate(G,G.hands[seat]);
+  let want=Math.floor(e+0.5+L.bidBias+(Math.random()*2-1)*L.bidNoise);
+  if(M.gomu)want+=1;
+  if(M.team)want+=3;
+  if(M.team&&curBidder>=0&&curBidder%2===seat%2&&curBidder!==seat)want-=2;
+  if(M.team&&G.cfg.help&&G.humanSaid&&seat===(G.human+2)%4)want+={iyi:1.5,orta:0,'kötü':-1.5}[G.humanSaid];
+  want=Math.min(want,M.max);
+  const next=Math.max(M.min,high+1);
+  if(want<next)return 0;
+  if(want-next>=3&&next+1<=M.max&&L.id!=='kolay')return next+1;
+  return next;
+}
+async function doBidding(G,ui){
+  const M=G.M,n=G.n;let high=0,bidder=-1;const active=new Array(n).fill(true);let cur=(G.dealer+1)%n;
+  G.phase='bid';
+  for(let guard=0;guard<400;guard++){
+    const act=active.filter(Boolean).length;
+    if(act===1){if(bidder<0){bidder=active.indexOf(true);high=M.forced||M.min;G.bids[bidder]=high;}break;}
+    if(high>=M.max)break;
+    if(!active[cur]){cur=(cur+1)%n;continue;}
+    G.turn=cur;ui.render();
+    let b;
+    if(cur===G.human)b=await ui.humanBid(G,high,M.min,M.max);
+    else{
+      if(M.team&&G.cfg.help&&cur===(G.human+2)%4&&!G.askedByPartner&&Math.random()<0.7){
+        G.askedByPartner=true;G.talk[cur]='ask';ui.render();
+        G.humanSaid=await ui.humanAnswer(G);chk(G);G.talk[cur]=null;ui.render();
+      }
+      await ui.sleep(650);chk(G);b=botBid(G,cur,high,bidder);
+    }
+    chk(G);
+    if(b>0){high=b;bidder=cur;G.bids[cur]=b;}else{active[cur]=false;G.bids[cur]='pas';}
+    cur=(cur+1)%n;
+  }
+  G.decl=bidder;G.bid=high;ui.render();
+}
+async function buryAndTrump(G,ui){
+  const M=G.M,d=G.decl;
+  G.phase='trump';ui.render();
+  let disc;
+  if(d===G.human)disc=await ui.humanPick(G,M.gomu,`Elinden ${M.gomu} kart indir (kapalı)`,`Sonra yerdeki ${M.gomu} kart sana geçecek`);
+  else{await ui.sleep(900);chk(G);disc=botDiscard(G.hands[d],botTrump(G.hands[d]),M.gomu);}
+  chk(G);
+  G.dead=disc;G.hands[d]=G.hands[d].filter(c=>!disc.includes(c));
+  G.hands[d]=sortHand(G.hands[d].concat(G.gomu));G.newIds=G.gomu.slice();ui.render();
+  await ui.showGomu(G);chk(G);
+  if(d===G.human)G.trump=await ui.humanTrump(G);
+  else{await ui.sleep(700);chk(G);G.trump=botTrump(G.hands[d]);}
+  G.newIds=[];chk(G);
+}
+async function afterBid(G,ui){
+  const M=G.M,d=G.decl;G.phase='trump';
+  if(M.gomu){
+    await buryAndTrump(G,ui);
+  }else if(G.cfg.trumpMode==='spade'){G.trump=0;}
+  else if(d===G.human){G.trump=await ui.humanTrump(G);}
+  else{await ui.sleep(700);chk(G);G.trump=botTrump(G.hands[d]);}
+  chk(G);
+  if(M.team&&G.cfg.dummy)G.dummy=(d+2)%4;
+  G.turn=d;G.phase='play';
+}
+async function setup358(G,ui){
+  const n=3;G.targets=new Array(n);
+  G.targets[(G.dealer+1)%n]=8;G.targets[(G.dealer+2)%n]=5;G.targets[G.dealer]=3;
+  G.decl=(G.dealer+1)%n;G.bid=8;G.phase='trump';ui.render();
+  await buryAndTrump(G,ui);
+  chk(G);G.turn=G.decl;G.phase='play';
+}
+/* ---- card play AI ---- */
+function trumpsOut(S,hand){let k=0;for(let r=2;r<=14;r++){const id=S.trump*15+r;if(!S.played[id]&&!hand.includes(id))k++;}return k;}
+function higherOut(S,hand,s,r){for(let q=r+1;q<=14;q++){const id=s*15+q;if(!S.played[id]&&!hand.includes(id))return true;}return false;}
+function isMasterC(S,hand,c,L){const s=Sx(c),r=Rx(c);if(!L.count)return r===14;return !higherOut(S,hand,s,r);}
+function ruffRisk(S,seat,s,L,tOut){
+  if(!L.voids||tOut===0)return false;
+  for(let o=0;o<S.n;o++){if(o===seat||friendly(S,seat,o))continue;if(S.void[o][s]&&!S.void[o][S.trump])return true;}
+  return false;
+}
+function pickLead(S,seat,legal,L){
+  const hand=S.hands[seat],T=S.trump,n=S.n,myT=cntSuit(hand,T);
+  const tOut=L.count?trumpsOut(S,hand):Math.max(0,13-myT);
+  const declSide=S.mode==='s358'||friendly(S,seat,S.decl);
+  let best=legal[0],bs=-1e9;
+  for(const c of legal){
+    const s=Sx(c),r=Rx(c),cnt=cntSuit(hand,s),master=isMasterC(S,hand,c,L);let sc;
+    if(s!==T){
+      if(master){sc=60+Math.min(cnt,5);if(ruffRisk(S,seat,s,L,tOut))sc-=55;}
+      else{
+        sc=20-r;if(cnt===1&&myT>0)sc+=8;if(cnt>=4)sc+=4;
+        if(L.voids)for(let o=0;o<n;o++){
+          if(o===seat)continue;
+          if(S.void[o][s]&&!S.void[o][T]&&tOut>0)sc+=friendly(S,seat,o)?28:-16;
+        }
+      }
+    }else{
+      if(master)sc=tOut>0?(declSide?64:50):72;
+      else sc=(declSide&&myT>=4&&tOut>0)?40+r*0.4:-10;
+      if(myT===hand.length)sc+=40;
+    }
+    sc+=Math.random()*L.noise;
+    if(sc>bs){bs=sc;best=c;}
+  }
+  return best;
+}
+function lowestC(a){let b=a[0];for(const c of a)if(Rx(c)<Rx(b))b=c;return b;}
+function highestC(a){let b=a[0];for(const c of a)if(Rx(c)>Rx(b))b=c;return b;}
+function dump(S,seat,legal,L){
+  const hand=S.hands[seat],T=S.trump,myT=cntSuit(hand,T);
+  let bc=legal[0],bs=1e9;
+  for(const c of legal){
+    const s=Sx(c),r=Rx(c),cnt=cntSuit(hand,s);let v=r;
+    if(s===T)v+=30;
+    else{if(isMasterC(S,hand,c,L))v+=22;if(cnt===1&&myT>0)v-=5;}
+    v+=Math.random()*L.noise;
+    if(v<bs){bs=v;bc=c;}
+  }
+  return bc;
+}
+function secure(S,hand,c,laterOpp,L,tOut){
+  if(!isMasterC(S,hand,c,L))return false;
+  const s=Sx(c),T=S.trump;
+  if(s===T)return true;
+  if(tOut>0&&L.voids)for(const o of laterOpp)if(S.void[o][s]&&!S.void[o][T])return false;
+  return true;
+}
+function pickFollow(S,seat,legal,L){
+  const T=S.trump,trick=S.trick,n=S.n,hand=S.hands[seat];
+  let best=trick[0][1],bestSeat=trick[0][0];
+  for(let i=1;i<trick.length;i++)if(beats(trick[i][1],best,T)){best=trick[i][1];bestSeat=trick[i][0];}
+  const last=trick.length===n-1;
+  const laterOpp=[];
+  for(let j=0;j<n-1-trick.length;j++){const o=(seat+1+j)%n;if(!friendly(S,seat,o))laterOpp.push(o);}
+  const tOut=L.count?trumpsOut(S,hand):5;
+  const winners=legal.filter(c=>beats(c,best,T));
+  const friendWin=bestSeat!==seat&&friendly(S,seat,bestSeat);
+  if(friendWin){
+    const sec=last||laterOpp.length===0||secure(S,hand,best,laterOpp,L,tOut);
+    if(sec||!winners.length)return dump(S,seat,legal,L);
+    if(L.count){const ms=winners.filter(c=>secure(S,hand,c,laterOpp,L,tOut));if(ms.length)return lowestC(ms);}
+    return dump(S,seat,legal,L);
+  }
+  if(winners.length){
+    if(last||laterOpp.length===0)return lowestC(winners);
+    const ms=winners.filter(c=>secure(S,hand,c,laterOpp,L,tOut));
+    if(ms.length)return lowestC(ms);
+    const nt=winners.filter(c=>Sx(c)!==T);
+    if(nt.length)return highestC(nt);
+    return lowestC(winners);
+  }
+  return dump(S,seat,legal,L);
+}
+function policy(S,seat,L){
+  const legal=legalMoves(S.hands[seat],S.trick,S.trump,S.broken);
+  if(legal.length===1)return legal[0];
+  if(L.rand&&Math.random()<L.rand)return legal[(Math.random()*legal.length)|0];
+  return S.trick.length?pickFollow(S,seat,legal,L):pickLead(S,seat,legal,L);
+}
+/* ---- expert: determinized Monte-Carlo ---- */
+function cloneSim(S){
+  return Object.assign({},S,{hands:S.hands.map(h=>h.slice()),trick:S.trick.map(x=>x.slice()),
+    played:S.played.slice(),void:S.void.map(v=>v.slice()),won:S.won.slice(),lastTrick:null});
+}
+function utility(S,seat){
+  const W=S.won;
+  if(S.mode==='s358'){const t=S.targets[seat],w=W[seat];return w>=t?1+(w-t)*0.02:0.45*w/t;}
+  const dt=S.M.team?W[S.decl]+W[(S.decl+2)%4]:W[S.decl];
+  const made=dt>=S.bid;
+  if(friendly(S,seat,S.decl))return made?1+(dt-S.bid)*0.02:0.5*dt/S.bid;
+  const mine=S.M.team?W[seat]+W[(seat+2)%4]:W[seat];
+  return made?0.05+mine*0.01:1+(S.bid-dt)*0.03+mine*0.01;
+}
+function rollout(S0,seat,card){
+  const S=cloneSim(S0);
+  playCard(S,seat,card);
+  for(let g=0;g<80;g++){
+    const s=S.turn;if(!S.hands[s].length)break;
+    playCard(S,s,policy(S,s,LROLL));
+  }
+  return utility(S,seat);
+}
+function sampleWorld(G,pool,unknown){
+  const S=cloneSim(G);const cards=shuffle(pool.slice());
+  const vc=s=>G.void[s][0]+G.void[s][1]+G.void[s][2]+G.void[s][3];
+  const order=unknown.slice().sort((a,b)=>vc(b)-vc(a));
+  for(const seat of order){
+    const need=G.hands[seat].length,h=[];
+    for(let i=0;i<cards.length&&h.length<need;i++){
+      const c=cards[i];
+      if(!G.void[seat][Sx(c)]){h.push(c);cards.splice(i,1);i--;}
+    }
+    while(h.length<need&&cards.length)h.push(cards.pop());
+    S.hands[seat]=h;
+  }
+  return S;
+}
+async function expertChoose(G,seat,ctl,tick){
+  const hand=G.hands[seat],legal=legalMoves(hand,G.trick,G.trump,G.broken);
+  if(legal.length===1)return legal[0];
+  const known=new Set([seat,ctl]);if(G.dummy>=0)known.add(G.dummy);
+  const inHand=new Set();known.forEach(s=>G.hands[s].forEach(c=>inHand.add(c)));
+  const pool=[];
+  for(let s=0;s<4;s++)for(let r=2;r<=14;r++){const id=s*15+r;if(!G.played[id]&&!inHand.has(id))pool.push(id);}
+  const unknown=[];for(let s=0;s<G.n;s++)if(!known.has(s))unknown.push(s);
+  const budget=G.cfg.budget||450;
+  const util=new Map(legal.map(c=>[c,0]));
+  const t0=performance.now();let cnt=0;
+  while(cnt<60){
+    const S=sampleWorld(G,pool,unknown);
+    for(const c of legal)util.set(c,util.get(c)+rollout(S,seat,c));
+    cnt++;
+    if(performance.now()-t0>budget&&cnt>=5)break;
+    if(cnt%3===0&&tick)await tick();
+  }
+  const hp=policy(G,seat,LEVELS.zor);
+  let best=legal[0],bv=-1;
+  for(const c of legal){const v=util.get(c)/cnt+(c===hp?0.004:0);if(v>bv){bv=v;best=c;}}
+  return best;
+}
+async function botMove(G,seat,ctl,ui){
+  const L=LEVELS[G.cfg.level];
+  if(L.expert&&G.hands[seat].length>1)return await expertChoose(G,seat,ctl,ui.tick);
+  return policy(G,seat,L);
+}
+async function playTricks(G,ui){
+  const rounds=G.hands[0].length;G.phase='play';
+  for(let t=0;t<rounds;t++){
+    for(let k=0;k<G.n;k++){
+      const seat=G.turn,ctl=seat===G.dummy?G.decl:seat;
+      ui.render();
+      let card;
+      if(ctl===G.human)card=await ui.humanMove(G,seat);
+      else{await ui.sleep(G.cfg.think||600);chk(G);card=await botMove(G,seat,ctl,ui);}
+      chk(G);
+      const w=playCard(G,seat,card);G.lastPlayed=card;
+      if(w>=0){ui.render(G.lastTrick);await ui.trickEnd(G,w);chk(G);}else ui.render();
+    }
+  }
+}
+function scoreDeal(G){
+  const M=G.M,W=G.won,d=G.decl;const delta=new Array(G.scores.length).fill(0);let made=true;
+  if(G.mode==='s358'){
+    for(let s=0;s<3;s++){delta[s]=W[s]-G.targets[s];}
+  }else if(M.team){
+    const dt=W[d]+W[(d+2)%4];made=dt>=G.bid;const td=d%2,to=1-td;
+    delta[td]=made?dt:-G.bid;delta[to]=W[to]+W[to+2];
+  }else{
+    made=W[d]>=G.bid;
+    for(let s=0;s<G.n;s++)delta[s]=s===d?(made?W[d]:-G.bid):W[s];
+  }
+  G.lastDelta=delta.slice();
+  for(let i=0;i<delta.length;i++)G.scores[i]+=delta[i];
+  const row={no:G.dealNo,decl:d,bid:G.bid,trump:G.trump,won:W.slice(),delta,made,targets:G.targets};
+  G.history.push(row);
+  const T=G.cfg.target,mx=Math.max(...G.scores);
+  if(mx>=T||G.dealNo>=60){
+    const ls=G.scores.map((s,i)=>s===mx?i:-1).filter(i=>i>=0);
+    if(ls.length===1){G.over=true;G.winner=ls[0];}
+  }
+  return row;
+}
+function botGive(hand,k){return hand.slice().sort((a,b)=>Rx(a)-Rx(b)||a-b).slice(0,k);}
+async function doExchange(G,ui){
+  const D=G.lastDelta;if(!D)return;
+  const rem=D.slice(),pl=[],mi=[];
+  for(let s=0;s<3;s++){if(D[s]>0)pl.push(s);else if(D[s]<0)mi.push(s);}
+  if(!pl.length||!mi.length)return;
+  pl.sort((a,b)=>D[b]-D[a]);mi.sort((a,b)=>D[a]-D[b]);
+  const origs={};mi.forEach(m=>origs[m]=new Set(G.hands[m]));
+  const log=[];G.phase='exch';
+  for(const P of pl)for(const M of mi){
+    const t=Math.min(rem[P],-rem[M]);if(t<=0)continue;
+    rem[P]-=t;rem[M]+=t;
+    let give;
+    if(P===G.human){ui.render();give=await ui.humanPick(G,t,`Kart değişimi: ${ui.name(M)} ile ${t} kart değiştir`,'Verdiğin her kart için o rengin en üst kartını alırsın');}
+    else{await ui.sleep(500);give=botGive(G.hands[P],t);}
+    chk(G);
+    const orig=origs[M];
+    for(const c of give){
+      let best=-1;
+      for(const x of orig)if(Sx(x)===Sx(c)&&(best<0||Rx(x)>Rx(best)))best=x;
+      if(best<0){log.push({P,M,give:c,get:-1});continue;}
+      orig.delete(best);
+      G.hands[P][G.hands[P].indexOf(c)]=best;G.hands[M][G.hands[M].indexOf(best)]=c;
+      log.push({P,M,give:c,get:best});
+    }
+  }
+  for(let s=0;s<3;s++)sortHand(G.hands[s]);
+  ui.render();
+  await ui.showExchange(G,log);chk(G);
+}
+async function runGame(G,ui){
+  try{
+    while(!G.over){
+      G.dealNo++;dealCards(G);ui.render();await ui.sleep(500);chk(G);
+      if(G.mode==='s358'&&G.dealNo>1)await doExchange(G,ui);
+      if(G.mode==='s358')await setup358(G,ui);else{await doBidding(G,ui);await afterBid(G,ui);}
+      await playTricks(G,ui);
+      const row=scoreDeal(G);
+      await ui.dealResult(G,row);chk(G);
+      G.dealer=(G.dealer+1)%G.n;
+    }
+  }catch(e){if(e!==ABORT)throw e;}
+}
+/*END_ENGINE*/
+
+/*UI*/
+const $=id=>document.getElementById(id);
+const defaults={mode:'tekli',level:'zor',target:51,trumpMode:'spade',dummy:true,speed:1,exch:'points',help:false,names:['','','','']};
+let cfg=Object.assign({},defaults);
+try{cfg=Object.assign(cfg,JSON.parse(localStorage.getItem('batakCfg')||'{}'));}catch(e){}
+if(!Array.isArray(cfg.names))cfg.names=['','','',''];
+let G=null,pending=null,hintCard=-1;
+const NAMES={4:['Sen','Hüseyin Usta','Selin','Murat'],3:['Sen','Hüseyin Usta','Selin']};
+const AV=['🧑','🧔','👩','👨‍🦳'];
+const cleanName=v=>String(v||'').replace(/[<>&"'`]/g,'').trim().slice(0,14);
+function seatName(seat){
+  const cn=seat>0&&G.cfg.names?cleanName(G.cfg.names[seat]):'';
+  if(cn)return (G.mode==='esli'&&seat===2)?`Eşin (${cn})`:cn;
+  if(G.mode==='esli'&&seat===2)return 'Eşin (Kemal)';
+  if(G.mode==='esli'&&seat===1)return 'Hüseyin';
+  if(G.mode==='esli'&&seat===3)return 'Nazlı';
+  return NAMES[G.n][seat];
+}
+const posOf=(G,seat)=>(G.n===4?['b','r','t','l']:['b','r','l'])[seat];
+const isRed=s=>s===1||s===2;
+/* ---- KART GÖRSELLERİ (SVG) ---- */
+const INK='#2a1a10',GOLD='#d4a02c',GOLD2='#f3d27d',RED='#b3231f',BLUE='#1f4a7a',SKIN='#f2d6b2',HAIR='#e2b441',CREAM='#fbf5e3',BRN='#8d5a2b';
+const SW=`stroke="${INK}" stroke-width=".55" stroke-linejoin="round" stroke-linecap="round"`;
+const SUITPATH=[
+ '<path d="M10 1C10 1 18 7 18 12C18 15 15.5 16.5 13.5 16C12.5 15.8 11.7 15.3 11 14.5C11.2 16.5 11.8 17.8 13 19H7C8.2 17.8 8.8 16.5 9 14.5C8.3 15.3 7.5 15.8 6.5 16C4.5 16.5 2 15 2 12C2 7 10 1 10 1Z"/>',
+ '<path d="M10 18.5C3 12.5 1 9.5 1 6.5C1 3.5 3.3 1.5 5.7 1.5C7.5 1.5 9 2.6 10 4.4C11 2.6 12.5 1.5 14.3 1.5C16.7 1.5 19 3.5 19 6.5C19 9.5 17 12.5 10 18.5Z"/>',
+ '<path d="M10 .8C12 4.5 15 7.5 18.5 10C15 12.5 12 15.5 10 19.2C8 15.5 5 12.5 1.5 10C5 7.5 8 4.5 10 .8Z"/>',
+ '<circle cx="10" cy="5.6" r="4.4"/><circle cx="4.9" cy="12" r="4.4"/><circle cx="15.1" cy="12" r="4.4"/><path d="M10 9.5C10 14 9.5 16.5 7.5 19H12.5C10.5 16.5 10 14 10 9.5Z"/>'
+];
+const BODY='M24 50L38 43L50 46L62 43L76 50L76 83L24 59Z';
+function hands(r){
+  let g=`<ellipse cx="35.5" cy="57" rx="4.2" ry="3.3" fill="${SKIN}" ${SW}/><path d="M32.6 55.8Q35.5 54.4 38.3 56M32.4 57.4Q35.5 56.2 38.6 57.8" fill="none" stroke="${INK}" stroke-width=".3"/>`;
+  g+=`<ellipse cx="72" cy="48" rx="3.3" ry="3.7" fill="${SKIN}" ${SW}/><path d="M69.4 46.4h5.2M69.2 48.2h5.6M69.4 50h5.2" stroke="${INK}" stroke-width=".3"/>`;
+  return g;
+}
+function figure(r,s){
+  const red=s===1||s===2,P=red?RED:BLUE,Q=red?BLUE:RED;
+  let g='';
+  // saç (arka)
+  if(r===13)g+=`<path d="M37 24C34 32 36 40 41 45L59 45C64 40 66 32 63 24C61 13 39 13 37 24Z" fill="${HAIR}" ${SW}/><path d="M38.5 28C37.5 33 38.5 38 41 41M61.5 28C62.5 33 61.5 38 59 41" fill="none" stroke="${BRN}" stroke-width=".35"/>`;
+  else if(r===12)g+=`<path d="M36 22C30 34 29 48 33 60L67 60C71 48 70 34 64 22C62 11 38 11 36 22Z" fill="${HAIR}" ${SW}/><path d="M33.5 30C32 40 33 50 35 56M66.5 30C68 40 67 50 65 56M36 34C35 42 36 48 38 52M64 34C65 42 64 48 62 52" fill="none" stroke="${BRN}" stroke-width=".35"/>`;
+  else g+=`<path d="M37 23C36 31 38 35 41 37L59 37C62 35 64 31 63 23C62 14 38 14 37 23Z" fill="${HAIR}" ${SW}/><circle cx="38.4" cy="31" r="2.7" fill="${HAIR}" ${SW}/><circle cx="61.6" cy="31" r="2.7" fill="${HAIR}" ${SW}/><circle cx="40" cy="36" r="2.2" fill="${HAIR}" ${SW}/><circle cx="60" cy="36" r="2.2" fill="${HAIR}" ${SW}/>`;
+  // gövde
+  g+=`<g clip-path="url(#bodyclip)"><rect x="20" y="40" width="60" height="50" fill="${P}"/>`;
+  g+=`<path d="M20 40H37L38 92H20Z" fill="${Q}"/><path d="M80 40H63L62 92H80Z" fill="${Q}"/>`;
+  for(let y=52;y<92;y+=7)for(const x of [26,32,68,74])g+=`<path d="M${x} ${y-2.6}L${x+2.2} ${y}L${x} ${y+2.6}L${x-2.2} ${y}Z" fill="${GOLD}" stroke="${INK}" stroke-width=".25"/>`;
+  g+=`<path d="M37 42L44 45L45 92H38Z" fill="${CREAM}" stroke="${INK}" stroke-width=".4"/><path d="M63 42L56 45L55 92H62Z" fill="${CREAM}" stroke="${INK}" stroke-width=".4"/>`;
+  for(let y=50;y<92;y+=5.5){g+=`<path d="M41.2 ${y}v2M58.8 ${y}v2" stroke="${INK}" stroke-width=".55" stroke-linecap="round"/>`;}
+  for(let y=52;y<92;y+=6)g+=`<path d="M45 ${y}L50 ${y+3.6}L55 ${y}" fill="none" stroke="${GOLD}" stroke-width="1.1"/>`;
+  g+=`<rect x="20" y="57" width="60" height="5" fill="${GOLD}" stroke="${INK}" stroke-width=".4"/><use href="#sp${s}" x="46" y="56" width="8" height="7" fill="${P}" stroke="${INK}" stroke-width=".7"/>`;
+  g+=`</g><path d="${BODY}" fill="none" ${SW} stroke-width=".8"/>`;
+  // boyun
+  g+=`<rect x="45.3" y="36" width="9.4" height="12" fill="${SKIN}" ${SW}/>`;
+  if(r===12)g+=`<path d="M43 43.6Q50 55 57 43.6Z" fill="${SKIN}" ${SW}/>`;
+  g+=`<path d="M37.5 43.5Q50 55 62.5 43.5L62.5 48.5Q50 60 37.5 48.5Z" fill="${GOLD}" ${SW}/>`;
+  for(const [x,y] of [[43.7,50.3],[50,51.8],[56.3,50.3]])g+=`<circle cx="${x}" cy="${y}" r="1" fill="${P}" stroke="${INK}" stroke-width=".25"/>`;
+  // yüz
+  g+=`<ellipse cx="40.7" cy="29" rx="1.5" ry="2.2" fill="${SKIN}" ${SW}/><ellipse cx="59.3" cy="29" rx="1.5" ry="2.2" fill="${SKIN}" ${SW}/>`;
+  g+=`<ellipse cx="50" cy="28" rx="9.2" ry="10.6" fill="${SKIN}" ${SW}/>`;
+  g+=`<path d="M42.4 31q1 3.2 3 4.4M57.6 31q-1 3.2-3 4.4" fill="none" stroke="${INK}" stroke-width=".3"/>`;
+  g+=`<ellipse cx="46.3" cy="27.6" rx="1.7" ry="1" fill="#fff" stroke="${INK}" stroke-width=".35"/><circle cx="46.3" cy="27.6" r=".75" fill="#3b4f66"/><ellipse cx="53.7" cy="27.6" rx="1.7" ry="1" fill="#fff" stroke="${INK}" stroke-width=".35"/><circle cx="53.7" cy="27.6" r=".75" fill="#3b4f66"/>`;
+  g+=`<path d="M43.8 25.2Q46.3 23.7 48.8 25M51.2 25Q53.7 23.7 56.2 25.2" fill="none" stroke="${r===13?'#8a5a14':INK}" stroke-width=".65" stroke-linecap="round"/>`;
+  g+=`<path d="M50 27.5L48.9 31.6Q50 32.5 51.3 31.7" fill="none" stroke="${INK}" stroke-width=".45"/>`;
+  if(r===13){
+    g+=`<path d="M40.6 27C39.6 37 44 44 50 46.5C56 44 60.4 37 59.4 27C57.6 33 54.5 35.5 50 35.5C45.5 35.5 42.4 33 40.6 27Z" fill="${HAIR}" ${SW}/><path d="M45 38v5M50 39v6M55 38v5" stroke="${BRN}" stroke-width=".35"/>`;
+    g+=`<path d="M43 31.3C46 29.6 49 31.2 50 32.4C51 31.2 54 29.6 57 31.3C54.5 34.3 51.5 33.5 50 33.5C48.5 33.5 45.5 34.3 43 31.3Z" fill="#c8922a" ${SW}/>`;
+    g+=`<path d="M47.8 35.1Q50 36 52.2 35.1" fill="none" stroke="${INK}" stroke-width=".4"/>`;
+  }else{
+    g+=`<circle cx="44.2" cy="31.6" r="1.8" fill="#e8907a" opacity=".45"/><circle cx="55.8" cy="31.6" r="1.8" fill="#e8907a" opacity=".45"/>`;
+    if(r===12)g+=`<path d="M46.6 34.6Q50 36.8 53.4 34.6Q50 33.6 46.6 34.6Z" fill="${RED}" ${SW}/><circle cx="40.5" cy="33.2" r="1.1" fill="${GOLD2}" ${SW}/><circle cx="59.5" cy="33.2" r="1.1" fill="${GOLD2}" ${SW}/>`;
+    else g+=`<path d="M47.4 34.2Q50 35.9 52.6 34.2" fill="none" stroke="${INK}" stroke-width=".45" stroke-linecap="round"/>`;
+  }
+  // taç / şapka
+  if(r===13){
+    g+=`<path d="M38.5 19L38 9.5L44 14L50 8L56 14L62 9.5L61.5 19Z" fill="${GOLD}" ${SW}/><rect x="38.2" y="17.4" width="23.6" height="4.6" fill="${P}" ${SW}/>`;
+    g+=`<circle cx="50" cy="19.7" r="1.3" fill="${GOLD2}" ${SW}/><circle cx="44" cy="19.7" r=".95" fill="${GOLD2}" ${SW}/><circle cx="56" cy="19.7" r=".95" fill="${GOLD2}" ${SW}/>`;
+    g+=`<circle cx="38" cy="9" r="1.2" fill="${CREAM}" ${SW}/><circle cx="50" cy="7.6" r="1.2" fill="${CREAM}" ${SW}/><circle cx="62" cy="9" r="1.2" fill="${CREAM}" ${SW}/>`;
+  }else if(r===12){
+    g+=`<path d="M39 19L39.4 11L44 15L47 9.4L50 14L53 9.4L56 15L60.6 11L61 19Z" fill="${GOLD}" ${SW}/><rect x="38.8" y="17.4" width="22.4" height="4" fill="${P}" ${SW}/>`;
+    g+=`<circle cx="50" cy="19.4" r="1.2" fill="${GOLD2}" ${SW}/><circle cx="44.5" cy="19.4" r=".9" fill="${GOLD2}" ${SW}/><circle cx="55.5" cy="19.4" r=".9" fill="${GOLD2}" ${SW}/>`;
+    g+=`<circle cx="39.4" cy="10.4" r="1.1" fill="${CREAM}" ${SW}/><circle cx="47" cy="8.8" r="1.1" fill="${CREAM}" ${SW}/><circle cx="53" cy="8.8" r="1.1" fill="${CREAM}" ${SW}/><circle cx="60.6" cy="10.4" r="1.1" fill="${CREAM}" ${SW}/>`;
+  }else{
+    g+=`<path d="M36.5 21C35 9.5 49 6.5 60 9.5C65 11.5 64 19 63.5 21C58 18.5 42 18.5 36.5 21Z" fill="${P}" ${SW}/><path d="M37 20.4C43 18.4 57 18.4 63 20.4L63 23.4C57 21.4 43 21.4 37 23.4Z" fill="${GOLD}" ${SW}/>`;
+    g+=`<path d="M58 12.5C63 6.5 70 7.5 69 13C66 11 63 11.2 58 12.5Z" fill="${CREAM}" ${SW}/><path d="M60 12C64 9.5 67 9.5 68.5 11" fill="none" stroke="${INK}" stroke-width=".3"/>`;
+    g+=`<circle cx="50" cy="14" r="1.4" fill="${GOLD2}" ${SW}/>`;
+  }
+  g+=hands(r);
+  // nesneler
+  if(r===13){
+    g+=`<path d="M71.9 7.4L73.8 11V41H70V11Z" fill="url(#blade)" ${SW}/><path d="M71.9 11V41" stroke="${BRN}" stroke-width=".3"/><rect x="66" y="41" width="11.8" height="2.5" rx="1.1" fill="${GOLD}" ${SW}/><rect x="71" y="43.5" width="1.8" height="9" fill="#6b3a1e" ${SW}/><circle cx="71.9" cy="54" r="2" fill="${P}" ${SW}/>`;
+    g+=`<ellipse cx="72" cy="48" rx="3.3" ry="3.7" fill="${SKIN}" ${SW}/><path d="M69.4 46.4h5.2M69.2 48.2h5.6M69.4 50h5.2" stroke="${INK}" stroke-width=".3"/>`;
+  }else if(r===12){
+    g+=`<path d="M72 50C72.4 42 71.2 32 72 24" fill="none" stroke="#6b3a1e" stroke-width="1.2" stroke-linecap="round"/><path d="M72 40C67 38 65.6 34 67.4 31.6C70.6 32.4 72 35.6 72 40Z" fill="${GOLD}" ${SW}/>`;
+    for(let i=0;i<5;i++){const a=i*72*Math.PI/180;g+=`<circle cx="${(72+3.1*Math.sin(a)).toFixed(2)}" cy="${(20.5-3.1*Math.cos(a)).toFixed(2)}" r="2.6" fill="${P}" ${SW}/>`;}
+    g+=`<circle cx="72" cy="20.5" r="2" fill="${GOLD2}" ${SW}/>`;
+    g+=`<ellipse cx="72" cy="48" rx="3.3" ry="3.7" fill="${SKIN}" ${SW}/><path d="M69.4 46.4h5.2M69.2 48.2h5.6M69.4 50h5.2" stroke="${INK}" stroke-width=".3"/>`;
+  }else{
+    g+=`<rect x="71.2" y="15" width="1.7" height="42" fill="#6b3a1e" ${SW}/><path d="M72 7.6L74.3 15.4H69.7Z" fill="url(#blade)" ${SW}/><path d="M72.9 17C78.6 16.4 79.6 24.6 75.6 29.6L72.9 27.4Z" fill="url(#blade)" ${SW}/><path d="M71.2 19L66.6 21L71.2 23.4Z" fill="url(#blade)" ${SW}/><circle cx="72" cy="57" r="1.6" fill="${GOLD}" ${SW}/>`;
+    g+=`<ellipse cx="72" cy="48" rx="3.3" ry="3.7" fill="${SKIN}" ${SW}/><path d="M69.4 46.4h5.2M69.2 48.2h5.6M69.4 50h5.2" stroke="${INK}" stroke-width=".3"/>`;
+  }
+  return g;
+}
+function buildDefs(){
+  let d='<defs>';
+  d+=`<linearGradient id="paper" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fffaf0"/><stop offset="1" stop-color="#eddfb8"/></linearGradient>`;
+  d+=`<linearGradient id="blade" x1="0" x2="1"><stop offset="0" stop-color="#c9c19c"/><stop offset=".5" stop-color="#fbf6dc"/><stop offset="1" stop-color="#b3aa80"/></linearGradient>`;
+  d+=`<clipPath id="bodyclip"><path d="${BODY}"/></clipPath>`;
+  for(let s=0;s<4;s++)d+=`<symbol id="sp${s}" viewBox="0 0 20 20">${SUITPATH[s]}</symbol>`;
+  for(let s=0;s<4;s++)for(const r of [11,12,13])d+=`<g id="fg${r}_${s}">${figure(r,s)}</g>`;
+  return d+'</defs>';
+}
+document.body.insertAdjacentHTML('beforeend',`<svg width="0" height="0" style="position:absolute" aria-hidden="true">${buildDefs()}</svg>`);
+const PIPS={
+  2:[[1,0],[1,1]],3:[[1,0],[1,.5],[1,1]],4:[[0,0],[2,0],[0,1],[2,1]],
+  5:[[0,0],[2,0],[1,.5],[0,1],[2,1]],6:[[0,0],[2,0],[0,.5],[2,.5],[0,1],[2,1]],
+  7:[[0,0],[2,0],[1,.25],[0,.5],[2,.5],[0,1],[2,1]],
+  8:[[0,0],[2,0],[1,.25],[0,.5],[2,.5],[1,.75],[0,1],[2,1]],
+  9:[[0,0],[2,0],[0,1/3],[2,1/3],[1,.5],[0,2/3],[2,2/3],[0,1],[2,1]],
+  10:[[0,0],[2,0],[1,1/6],[0,1/3],[2,1/3],[0,2/3],[2,2/3],[1,5/6],[0,1],[2,1]]
+};
+const faceCache={};
+function faceSVG(c){
+  if(faceCache[c])return faceCache[c];
+  const s=Sx(c),r=Rx(c),red=s===1||s===2,col=red?RED:'#1b1b22',rk=rankName(r);
+  let v=`<svg viewBox="0 0 100 142" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">`;
+  v+=`<rect x=".6" y=".6" width="98.8" height="140.8" rx="7" fill="url(#paper)" stroke="${BRN}" stroke-width="1.2"/>`;
+  v+=`<rect x="3.4" y="3.4" width="93.2" height="135.2" rx="4.6" fill="none" stroke="${GOLD}" stroke-width="1.1"/>`;
+  v+=`<rect x="5.2" y="5.2" width="89.6" height="131.6" rx="3.4" fill="none" stroke="${BRN}" stroke-width=".4"/>`;
+  for(const [x,y] of [[8,8],[92,8],[8,134],[92,134]])v+=`<circle cx="${x}" cy="${y}" r="1" fill="${GOLD}"/>`;
+  v+=`<rect x="22" y="7" width="56" height="128" fill="#fbf4de" stroke="${BRN}" stroke-width=".7"/><rect x="23.4" y="8.4" width="53.2" height="125.2" fill="none" stroke="${GOLD}" stroke-width=".5"/>`;
+  const idx=`<text x="12.5" y="21" font-size="${r===10?14:21}" font-weight="700" letter-spacing="${r===10?-.6:0}" text-anchor="middle" fill="${col}" font-family="Georgia,'Times New Roman',serif">${rk}</text><use href="#sp${s}" x="6.5" y="25" width="12" height="12" fill="${col}"/>`;
+  v+=idx+`<g transform="rotate(180 50 71)">${idx}</g>`;
+  if(r>=11&&r<=13){
+    v+=`<use href="#fg${r}_${s}"/><use href="#fg${r}_${s}" transform="rotate(180 50 71)"/>`;
+    const pip=`<use href="#sp${s}" x="24.5" y="9.5" width="10.5" height="10.5" fill="${col}"/>`;
+    v+=pip+`<g transform="rotate(180 50 71)">${pip}</g>`;
+  }else if(r===14){
+    v+=`<circle cx="50" cy="71" r="26" fill="none" stroke="${GOLD}" stroke-width="1.3"/><circle cx="50" cy="71" r="23.6" fill="none" stroke="${BRN}" stroke-width=".4"/>`;
+    for(let i=0;i<24;i++){const a=i*15*Math.PI/180,c0=Math.cos(a),s0=Math.sin(a);v+=`<path d="M${(50+23.6*s0).toFixed(2)} ${(71-23.6*c0).toFixed(2)}L${(50+26*s0).toFixed(2)} ${(71-26*c0).toFixed(2)}" stroke="${GOLD}" stroke-width=".6"/>`;}
+    const big=s===0?46:40;
+    v+=`<use href="#sp${s}" x="${50-big/2}" y="${71-big/2}" width="${big}" height="${big}" fill="${col}"/>`;
+    for(const [x,y,rot] of [[25,10,0],[25,10,1]]){const u=`<use href="#sp${s}" x="${x}" y="${y}" width="8" height="8" fill="${col}"/>`;v+=rot?`<g transform="rotate(180 50 71)">${u}</g>`:u;}
+  }else{
+    const pw=r>=9?15.5:18;
+    for(const [cx,t] of PIPS[r]){
+      const x=34+cx*16,y=24+t*94;
+      v+=`<use href="#sp${s}" x="${(x-pw/2).toFixed(2)}" y="${(y-pw/2).toFixed(2)}" width="${pw}" height="${pw}" fill="${col}"${t>.5?` transform="rotate(180 ${x.toFixed(2)} ${y.toFixed(2)})"`:''}/>`;
+    }
+  }
+  v+='</svg>';
+  return faceCache[c]=v;
+}
+function cardEl(c,cls){
+  const s=Sx(c),d=document.createElement('div');
+  d.className='card '+(isRed(s)?'red':'')+(cls?' '+cls:'');
+  d.innerHTML=faceSVG(c);
+  return d;
+}
+
+function backEl(){const d=document.createElement('div');d.className='card back';return d;}
+function showActions(html){const a=$('actions');a.innerHTML=html;a.style.display='block';return a;}
+function hideActions(){$('actions').style.display='none';}
+
+const ui={
+  render(disp){render(disp);},
+  tick(){return new Promise(r=>setTimeout(r,0));},
+  sleep(ms){return new Promise(r=>setTimeout(r,ms*cfg.speed));},
+  humanBid(G,high,min,max){
+    return new Promise(res=>{
+      pending={type:'bid'};
+      const lo=Math.max(min,high+1);
+      let h=`<div class="at">İhale — kaç el alırsın?${high?` <small>(en yüksek: ${high})</small>`:''}</div><div class="bgrid">`;
+      for(let b=lo;b<=max;b++)h+=`<button class="btn" data-b="${b}">${b}</button>`;
+      h+=`<button class="btn pass" data-b="0">Pas</button></div>`;
+      const canAsk=G.cfg.help&&G.M.team&&!G.asked;
+      if(canAsk)h+=`<button class="btn" id="askP">🗣 Eşine sor: "Elin nasıl ortak?"</button>`;
+      else if(G.cfg.help&&G.M.team&&G.talk[(G.human+2)%4])h+=`<div class="small">Eşin: "${SAYS[G.talk[(G.human+2)%4]]}"</div>`;
+      const a=showActions(h);
+      a.querySelectorAll('button[data-b]').forEach(b=>b.onclick=()=>{hideActions();pending=null;res(+b.dataset.b);});
+      if(canAsk)$('askP').onclick=async()=>{
+        const pt=(G.human+2)%4;G.asked=true;G.talk[pt]='think';
+        $('askP').disabled=true;$('askP').textContent='Eşin düşünüyor…';render();
+        await ui.sleep(900);
+        G.talk[pt]=rateHand(G,pt);render();
+        const rb=$('askP');if(rb){const d=document.createElement('div');d.className='small';d.textContent=`Eşin: "${SAYS[G.talk[pt]]}"`;rb.replaceWith(d);}
+      };
+      setStatus('İhale sırası sende');
+    });
+  },
+  humanTrump(G){
+    return new Promise(res=>{
+      pending={type:'trump'};
+      let h=`<div class="at">Kozu seç</div><div class="bgrid">`;
+      for(let s=0;s<4;s++)h+=`<button class="btn suit ${isRed(s)?'r':''}" data-t="${s}" title="${SUITN[s]}">${SUITS[s]}</button>`;
+      h+='</div>';
+      const a=showActions(h);
+      a.querySelectorAll('button').forEach(b=>b.onclick=()=>{hideActions();pending=null;res(+b.dataset.t);});
+      render();
+    });
+  },
+  showGomu(G){
+    return new Promise(res=>{
+      const wrap=document.createElement('div');
+      wrap.innerHTML=`<div class="at">${G.decl===G.human?'Yerdeki kartlar eline geçti (yeşil çerçeveli)':seatName(G.decl)+' yerdeki kartları aldı'}</div>`;
+      const r=document.createElement('div');r.className='rev';r.style.justifyContent='center';
+      const row=document.createElement('div');row.className='rr';r.appendChild(row);
+      G.gomu.forEach(c=>{const e=cardEl(c);e.style.setProperty('--cw','52px');row.appendChild(e);});
+      wrap.appendChild(r);
+      const ok=document.createElement('button');ok.className='btn gold';ok.textContent='Tamam';ok.style.marginTop='8px';
+      wrap.appendChild(ok);
+      const a=showActions('');a.appendChild(wrap);
+      ok.onclick=()=>{hideActions();res();};
+    });
+  },
+  name(seat){return seatName(seat);},
+  humanAnswer(G){
+    return new Promise(res=>{
+      pending={type:'answer'};
+      const pt=(G.human+2)%4;
+      const a=showActions(`<div class="at">${seatName(pt)}: "Elin nasıl ortak?"</div><div class="bgrid"><button class="btn" data-a="iyi">😀 İyi</button><button class="btn" data-a="orta">😐 Orta</button><button class="btn pass" data-a="kötü">🙁 Kötü</button></div>`);
+      render();setStatus('Eşin elini soruyor, cevap ver');
+      a.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>{hideActions();pending=null;G.talk[G.human]=b.dataset.a;res(b.dataset.a);});
+    });
+  },
+  humanPick(G,count,title,sub){
+    return new Promise(res=>{
+      const st={type:'pick',sel:new Set(),count,res};pending=st;
+      const draw=()=>{
+        const ok=st.sel.size===count;
+        const h=`<div class="at">${title}</div><div class="small">${sub||''}</div><div class="small">Seçilen: ${st.sel.size}/${count} (elindeki kartlara tıkla)</div><button class="btn gold" id="okg" ${ok?'':'disabled'}>Onayla</button>`;
+        showActions(h);
+        $('okg').onclick=()=>{if(!ok)return;hideActions();pending=null;res([...st.sel]);};
+      };
+      st.draw=draw;draw();render();setStatus('Kart seç');
+    });
+  },
+  showExchange(G,log){
+    log=log.filter(l=>l.P===G.human||l.M===G.human);
+    if(!log.length){setStatus('Rakipler kendi aralarında kart değişimi yaptı');return ui.sleep(1200);}
+    return new Promise(res=>{
+      let h='<h2>🔁 Kart değişimi</h2><p>Sadece senin yaptığın değişimler gösterilir. Artı alan, eksi alana bir kart verir; eksi alan o renkteki en üst kartını geri verir.</p><div style="display:flex;flex-direction:column;gap:10px">';
+      log.forEach(l=>{h+=`<div class="exrow"><span class="exn">${seatName(l.P)} → ${seatName(l.M)}</span><span class="exc" data-c="${l.give}"></span><span>⇄</span><span class="exc" data-c="${l.get}"></span></div>`;});
+      h+='</div><div class="row"><button class="btn gold" id="exOk">Tamam</button></div>';
+      $('exchBox').innerHTML=h;
+      $('exchBox').querySelectorAll('.exc').forEach(e=>{const c=+e.dataset.c;if(c<0)e.textContent='(o renkte kart yok, değişim olmadı)';else e.appendChild(cardEl(c));});
+      $('mExch').classList.add('show');
+      $('exOk').onclick=()=>{$('mExch').classList.remove('show');res();};
+    });
+  },
+  humanMove(G,seat){
+    return new Promise(res=>{pending={type:'move',seat,res};render();});
+  },
+  async trickEnd(G,w){
+    G.winSeat=w;render(G.lastTrick);
+    await ui.sleep(1000);
+    G.winSeat=-1;render();
+  },
+  dealResult(G,row){
+    return new Promise(res=>{
+      $('resultBox').innerHTML=resultHTML(G,row);
+      $('mResult').classList.add('show');
+      $('rNext').onclick=()=>{$('mResult').classList.remove('show');if(G.over)openMenu();else res();};
+    });
+  }
+};
+function setStatus(t){$('status').textContent=t;}
+function suitHtml(s){return `<b class="${isRed(s)?'red':''}">${SUITS[s]}</b>`;}
+function scoreNames(G){
+  if(G.M.team)return ['Biz (Sen+Eşin)','Onlar'];
+  return Array.from({length:G.n},(_,i)=>seatName(i));
+}
+function resultHTML(G,row){
+  const names=scoreNames(G);
+  let h=`<h2>${G.over?'🏆 Oyun bitti':`El ${row.no} sonucu`}</h2>`;
+  if(G.mode==='s358'){
+    h+='<table><tr><th>Oyuncu</th><th>Hedef</th><th>Alınan</th><th>Puan</th></tr>';
+    for(let s=0;s<3;s++)h+=`<tr><td>${seatName(s)}</td><td>${row.targets[s]}</td><td>${row.won[s]}</td><td class="${row.delta[s]>=0?'pos':'neg'}">${row.delta[s]>0?'+':''}${row.delta[s]}</td></tr>`;
+    h+='</table>';
+  }else{
+    h+=`<p>İhale: <b>${seatName(row.decl)}</b> — ${row.bid} el, koz ${suitHtml(row.trump)} → <b class="${row.made?'':'red'}">${row.made?'TUTTU ✔':'BATTI ✘'}</b></p>`;
+    h+='<table><tr><th>Oyuncu</th><th>Alınan el</th></tr>';
+    for(let s=0;s<G.n;s++)h+=`<tr><td>${seatName(s)}${s===row.decl?' 👑':''}</td><td>${row.won[s]}</td></tr>`;
+    h+='</table><h3>Puan değişimi</h3><table><tr>'+names.map(n=>`<th>${n}</th>`).join('')+'</tr><tr>'+
+      row.delta.map(d=>`<td class="${d>=0?'pos':'neg'}">${d>0?'+':''}${d}</td>`).join('')+'</tr></table>';
+  }
+  h+='<h3>Toplam</h3><table><tr>'+names.map(n=>`<th>${n}</th>`).join('')+'</tr><tr>'+G.scores.map(s=>`<td><b>${s}</b></td>`).join('')+'</tr></table>';
+  if(G.over){
+    const w=G.winner;const youWin=G.M.team?w===0:w===G.human;
+    h+=`<p style="font-size:16px;margin-top:12px">${youWin?'🎉 Tebrikler, kazandın!':'Kazanan: <b>'+names[w]+'</b>'}</p>`;
+  }
+  h+=`<div class="row"><button class="btn gold" id="rNext">${G.over?'Yeni Oyun':'Sonraki El'}</button></div>`;
+  return h;
+}
+function scoreModal(){
+  if(!G)return;
+  const names=scoreNames(G);
+  let h='<h2>Skor Tablosu</h2><table><tr><th>El</th><th>İhale</th>'+names.map(n=>`<th>${n}</th>`).join('')+'</tr>';
+  G.history.forEach(r=>{
+    const ih=G.mode==='s358'?'3-5-8':`${seatName(r.decl)} ${r.bid}${SUITS[r.trump]}${r.made?'':' ✘'}`;
+    h+=`<tr><td>${r.no}</td><td>${ih}</td>`+r.delta.map(d=>`<td class="${d>=0?'pos':'neg'}">${d>0?'+':''}${d}</td>`).join('')+'</tr>';
+  });
+  h+='<tr><th colspan="2">Toplam</th>'+G.scores.map(s=>`<th>${s}</th>`).join('')+'</tr></table>';
+  h+=`<p class="small">Hedef puan: ${G.cfg.target}</p><div class="row"><button class="btn gold" data-close="mScore">Kapat</button></div>`;
+  $('scoreBox').innerHTML=h;$('mScore').classList.add('show');
+}
+/* ---- rendering ---- */
+function legalFor(seat){return legalMoves(G.hands[seat],G.trick,G.trump,G.broken);}
+function humanPlayFor(seat,c){
+  if(pending&&pending.type==='move'&&pending.seat===seat){
+    if(!legalFor(seat).includes(c))return;
+    const p=pending;pending=null;hintCard=-1;hideActions();p.res(c);
+  }
+}
+function toggleSel(c){
+  if(!pending||pending.type!=='pick')return;
+  const st=pending;
+  if(st.sel.has(c))st.sel.delete(c);else if(st.sel.size<st.count)st.sel.add(c);
+  st.draw();render();
+}
+function seatBox(seat){
+  const turn=G.turn===seat&&(G.phase==='bid'||G.phase==='play');
+  const box=document.createElement('div');box.className='pbox'+(turn?' turn':'');
+  let meta='';
+  if(G.dealer===seat)meta+='<span class="tag">Dağıtıcı</span>';
+  if(G.decl===seat&&G.phase!=='bid'&&G.phase!=='deal')meta+=`<span class="tag g">👑 ${G.mode==='s358'?'8':G.bid}</span>`;
+  else if(G.mode==='s358'&&G.targets)meta+=`<span class="tag g">Hedef ${G.targets[seat]}</span>`;
+  if(G.phase==='play'||G.phase==='trump')meta+=`<span class="tag">El: ${G.won[seat]}</span>`;
+  if(G.dummy===seat)meta+='<span class="tag r">Açık</span>';
+  box.innerHTML=`<span class="av">${AV[seat]}</span><div><div class="nm">${seatName(seat)}</div><div class="meta">${meta}</div></div>`;
+  return box;
+}
+function renderSeat(seat){
+  const pos=posOf(G,seat),el=$('p-'+pos);el.replaceChildren();
+  const bub=document.createElement('div');bub.className='bub';
+  const tk=G.talk&&G.talk[seat];
+  if(tk==='ask')bub.textContent='💬 Elin nasıl ortak?';
+  else if(tk==='think')bub.textContent='💬 …';
+  else if(tk&&SAYS[tk]&&G.phase==='bid'&&G.bids[seat]==null)bub.textContent='💬 '+SAYS[tk];
+  else if(G.phase==='bid'&&G.bids[seat]!=null)bub.textContent=G.bids[seat]==='pas'?'Pas':G.bids[seat]+' el';
+  el.appendChild(seatBox(seat));el.appendChild(bub);
+  const h=G.hands[seat];
+  if(G.dummy===seat&&seat!==G.human){
+    const wrap=document.createElement('div');wrap.className='rev '+pos;
+    const ls=pending&&pending.type==='move'&&pending.seat===seat?new Set(legalFor(seat)):null;
+    const rows={};
+    h.forEach(c=>{
+      const e=cardEl(c);
+      if(ls){if(ls.has(c)){e.classList.add('ok');e.onclick=()=>humanPlayFor(seat,c);}else e.classList.add('dim');}
+      if(hintCard===c)e.classList.add('hint');
+      const key=pos==='t'?0:Sx(c);
+      if(!rows[key]){rows[key]=document.createElement('div');rows[key].className='rr';wrap.appendChild(rows[key]);}
+      rows[key].appendChild(e);
+    });
+    el.appendChild(wrap);
+  }else{
+    const st=document.createElement('div');st.className='stk'+(pos==='t'?'':' v');
+    const k=Math.min(h.length,16);
+    for(let i=0;i<k;i++)st.appendChild(backEl());
+    if(pos==='t'||pos==='l'||pos==='r'){el.appendChild(st);}
+  }
+}
+function renderMe(){
+  const me=G.human,hand=G.hands[me],box=$('hand');box.replaceChildren();
+  const ls=pending&&pending.type==='move'&&pending.seat===me?new Set(legalFor(me)):null;
+  const gm=pending&&pending.type==='pick';
+  hand.forEach(c=>{
+    const e=cardEl(c);
+    if(ls){if(ls.has(c)){e.classList.add('ok');e.onclick=()=>humanPlayFor(me,c);}else e.classList.add('dim');}
+    if(gm){e.onclick=()=>toggleSel(c);if(pending.sel.has(c))e.classList.add('sel');if(G.newIds.includes(c))e.classList.add('newc');}
+    if(hintCard===c)e.classList.add('hint');
+    box.appendChild(e);
+  });
+  const kids=box.children;
+  if(kids.length>1){
+    const cw=kids[0].offsetWidth||60,avail=box.clientWidth-16;
+    const step=Math.min(cw*0.46,(avail-cw)/(kids.length-1));
+    for(let i=1;i<kids.length;i++)kids[i].style.marginLeft=(step-cw)+'px';
+  }
+}
+function renderLive(){
+  const lv=$('live');
+  if(!(G.phase==='play'||G.phase==='trump')||G.decl<0){lv.style.display='none';return;}
+  const W=G.won,ch=[];
+  const chip=(label,n,tgt,sub,icon)=>{
+    const ok=tgt&&n>=tgt;
+    return `<span class="chip${tgt?' tgt':''}${ok?' done':''}">${tgt?(icon||'👑')+' ':''}${label}: <b>${n}</b>${tgt?' / '+tgt:''}${sub?` <small>${sub}</small>`:''}</span>`;
+  };
+  if(G.M.team){
+    for(const [nm,a,b] of [['Biz',0,2],['Onlar',1,3]]){
+      const isD=G.decl%2===a%2;
+      ch.push(chip(nm,W[a]+W[b],isD?G.bid:0,`(${seatName(a)} ${W[a]} + ${seatName(b)} ${W[b]})`));
+    }
+  }else{
+    for(let i=0;i<G.n;i++){
+      const tgt=G.mode==='s358'?G.targets[i]:(i===G.decl?G.bid:0);
+      ch.push(chip(seatName(i),W[i],tgt,'',G.mode==='s358'&&i!==G.decl?'🎯':'👑'));
+    }
+  }
+  lv.innerHTML='<span style="opacity:.85">Alınan eller →</span>'+ch.join('');
+  lv.style.display='flex';
+}
+function render(disp){
+  if(!G||!G.hands)return;
+  const sb=$('scorebar');sb.replaceChildren();
+  const names=scoreNames(G);
+  G.scores.forEach((s,i)=>{const c=document.createElement('span');c.className='chip'+((G.M.team?i===0:i===G.human)?' me':'');c.innerHTML=`${names[i]}: <b>${s}</b>`;sb.appendChild(c);});
+  renderLive();
+  const tc=document.createElement('span');tc.className='chip';tc.innerHTML=`${G.M.name} · hedef ${G.cfg.target} · ${{kolay:'Kolay',orta:'Orta',zor:'Zor',uzman:'Uzman'}[G.cfg.level]}`;sb.appendChild(tc);
+  for(let s=1;s<G.n;s++)renderSeat(s);
+  if(G.n===3)$('p-t').replaceChildren();
+  renderMe();
+  const T=G.trump;
+  let info=`Koz: <span class="big">${T>=0?suitHtml(T):'—'}</span>`;
+  if(G.decl>=0&&G.phase!=='bid'&&G.phase!=='deal')info+=G.mode==='s358'?` · 8 hedefli: ${seatName(G.decl)}`:` · İhale: ${seatName(G.decl)} (${G.bid})`;
+  if(G.phase==='bid'){const hb=Math.max(0,...G.bids.map(b=>typeof b==='number'?b:0));info=`İhale turu${hb?` · en yüksek: ${hb}`:''}`;}
+  $('info').innerHTML=info;
+  const tr=$('trick');tr.replaceChildren();
+  const shown=disp||G.trick;
+  shown.forEach(([seat,c])=>{
+    const sl=document.createElement('div');sl.className='slot '+posOf(G,seat)+(G.winSeat===seat?' win':'');
+    const e=cardEl(c);if(c===G.lastPlayed&&!disp)e.classList.add('new');
+    sl.appendChild(e);tr.appendChild(sl);
+  });
+  // status
+  if(G.phase==='play'){
+    const seat=G.turn,ctl=seat===G.dummy?G.decl:seat;
+    if(pending&&pending.type==='move')setStatus(pending.seat===G.human?'Sıra sende — oynamak için bir karta tıkla':'Eşinin açık elinden bir kart seç');
+    else setStatus(ctl===G.human?'':`${seatName(ctl)} düşünüyor…${seat===G.dummy?' (açık eli oynuyor)':''}`);
+  }else if(G.phase==='bid'&&!(pending&&pending.type==='bid'))setStatus(`${seatName(G.turn)} ihale veriyor…`);
+}
+/* ---- menu ---- */
+function openMenu(){
+  const m=cfg;
+  if(m.mode==='s358'&&m.target>30)m.target=12;
+  if(m.mode!=='s358'&&m.target<30)m.target=51;
+  const optBtn=(group,val,label,sub)=>`<button class="opt ${String(m[group])===String(val)?'on':''}" data-g="${group}" data-v="${val}">${label}${sub?`<small>${sub}</small>`:''}</button>`;
+  let h='<h2>♠ Batak Ustası</h2><h3>Oyun türü</h3><div class="opts">'+
+    optBtn('mode','tekli','Tekli','4 kişi, herkes kendi başına')+
+    optBtn('mode','esli','Eşli','4 kişi, karşılıklı eş')+
+    optBtn('mode','gomme','Üçlü Gömmeli','3 kişi, 16 kart + 4 gömü')+
+    optBtn('mode','s358','3-5-8','3 kişi, hedefler 8-5-3')+'</div>';
+  h+='<h3>Bot zorluğu</h3><div class="opts">'+
+    optBtn('level','kolay','Kolay')+optBtn('level','orta','Orta')+optBtn('level','zor','Zor')+optBtn('level','uzman','Uzman','simülasyonla oynar')+'</div>';
+  {
+    const M0=MODES[m.mode],lab=M0.n===4?(m.mode==='esli'?{1:'Sağındaki rakip',2:'Eşin',3:'Soldaki rakip'}:{1:'Sağındaki',2:'Karşındaki',3:'Soldaki'}):{1:'Sağındaki',2:'Soldaki'};
+    const defN=m.mode==='esli'?['','Hüseyin','Kemal','Nazlı']:NAMES[M0.n];
+    h+='<h3>Bot isimleri <small style="opacity:.7;font-weight:400">(boş bırakırsan varsayılan)</small></h3><div class="nmrow">';
+    for(let i=1;i<M0.n;i++)h+=`<label class="nmf"><span>${lab[i]}</span><input class="nm-in" data-s="${i}" maxlength="14" placeholder="${defN[i]}" value="${cleanName(m.names[i])}"></label>`;
+    h+='</div>';
+  }
+  h+='<h3>Oyun hedefi</h3><div class="opts">'+(m.mode==='s358'?optBtn('target',8,'8')+optBtn('target',12,'12')+optBtn('target',16,'16'):optBtn('target',31,'31')+optBtn('target',51,'51')+optBtn('target',101,'101'))+'</div>';
+  if(m.mode==='tekli'||m.mode==='esli')h+='<h3>Koz</h3><div class="opts">'+optBtn('trumpMode','spade','Maça sabit')+optBtn('trumpMode','choose','İhaleci seçer')+'</div>';
+  if(m.mode==='esli')h+='<h3>Eşli ayarı</h3><div class="opts">'+optBtn('dummy',true,'Açık eş','ihaleden sonra eş eli açar, kartı ihaleci oynar')+optBtn('dummy',false,'Kapalı','klasik, herkes kendi elini oynar')+'</div>';
+  if(m.mode==='esli')h+='<h3>Eş yardımı</h3><div class="opts">'+optBtn('help',true,'Açık','ihaleden önce eşinle elin hakkında konuşursun')+optBtn('help',false,'Kapalı')+'</div>';
+  h+='<h3>Hız</h3><div class="opts">'+optBtn('speed',1.6,'Yavaş')+optBtn('speed',1,'Normal')+optBtn('speed',0.45,'Hızlı')+'</div>';
+  h+='<div class="row"><button class="btn" id="mRulesBtn">Kurallar</button><button class="btn gold" id="mStart">▶ Oyunu Başlat</button></div>';
+  $('menuBox').innerHTML=h;
+  $('mMenu').classList.add('show');
+  $('menuBox').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
+    let v=b.dataset.v;const g=b.dataset.g;
+    if(g==='target'||g==='speed')v=+v;else if(g==='dummy'||g==='help')v=v==='true';
+    cfg[g]=v;
+    if(g==='mode'){if(v==='s358'&&cfg.target>30)cfg.target=12;if(v!=='s358'&&cfg.target<30)cfg.target=51;}
+    openMenu();
+  });
+  $('menuBox').querySelectorAll('.nm-in').forEach(i=>i.oninput=()=>{cfg.names[+i.dataset.s]=cleanName(i.value);});
+  $('mStart').onclick=()=>{$('mMenu').classList.remove('show');startGame();};
+  $('mRulesBtn').onclick=()=>$('mRules').classList.add('show');
+}
+function startGame(){
+  try{localStorage.setItem('batakCfg',JSON.stringify(cfg));}catch(e){}
+  if(G){G.aborted=true;}
+  pending=null;hintCard=-1;hideActions();
+  $('mResult').classList.remove('show');
+  const c=Object.assign({},cfg);
+  if(c.mode==='gomme'||c.mode==='s358')c.trumpMode='choose';
+  c.budget=cfg.level==='uzman'?(cfg.speed<0.6?260:cfg.speed>1.2?650:420):0;
+  c.think=600;
+  G=newGame(c);
+  const g=G;
+  runGame(g,ui).catch(e=>console.error(e));
+}
+document.addEventListener('click',e=>{const t=e.target.closest('[data-close]');if(t)$(t.dataset.close).classList.remove('show');});
+$('bMore').onclick=e=>{e.stopPropagation();$('drop').classList.toggle('open');};
+document.addEventListener('click',()=>$('drop').classList.remove('open'));
+$('bNew').onclick=openMenu;
+$('bScore').onclick=scoreModal;
+$('bRules').onclick=()=>$('mRules').classList.add('show');
+$('bHint').onclick=()=>{
+  if(pending&&pending.type==='move'){
+    const seat=pending.seat;
+    hintCard=policy(G,seat,LROLL);render();
+    setTimeout(()=>{hintCard=-1;if(pending)render();},2200);
+  }
+};
+window.addEventListener('resize',()=>{if(G&&G.hands)render();});
+openMenu();
+</script>
+</body>
+</html>
