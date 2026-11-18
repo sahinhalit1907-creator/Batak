@@ -180,7 +180,7 @@ td.pos{color:#7ee2a0}td.neg{color:#ff8a8a}
 <p><b>Puan:</b> herkes aldığı el eksi hedefi kadar yazar. Hedefinden fazla alan artı yazar (5 olması gerekirken 6 aldıysa +1), eksik alan eksi yazar (8 hedefliyken 6 aldıysa −2). Hedefini tam tutturan 0 yazar.</p>
 <p><b>Kart değişimi (bir sonraki elin başında):</b> fazla aldığı el kadar kart değiştirme hakkı doğar. Artı alan oyuncu eksi alana elinden istediği kartı verir; eksi alan, o renkteki en üst kartını geri verir (kupa 2 verildi, eksi alanda kupa As varsa onu verir). Eksi alan, kaç eksiyse o kadar kartı rakiplerine vermiş olur. O renkte kartı yoksa değişim olmaz.</p>
 <h3>Batma ve Çiz (tekli / eşli)</h3>
-<p><b>Batma:</b> eşlide 0 ya da 1 el alan oyuncunun takımı batar, tekli'de 0 el alan oyuncu batar; batan <b>ihale kadar eksi</b> yazar (menüden kapatılabilir). <b>Çiz:</b> ihalede 13 diyen "Çiz" demiş olur. 13 elin hepsini alırsa oyun hemen biter ve kazanır; alamazsa karşı taraf oyunu kazanır (tekli'de diğer oyuncuların en yüksek puanlısı).</p>
+<p><b>Batma:</b> eşlide batma <u>takımın toplam sonucuna</u> göre olur: kozcu olmayan (karşı) takım toplam 0 ya da 1 el alırsa batar (toplam 2 ve üzeri batmaz); kozcu takımı sadece ihaleyi alamazsa batar (ihale kadar eksi), tekli'de 0 el alan oyuncu batar; batan <b>ihale kadar eksi</b> yazar (menüden kapatılabilir). <b>Çiz:</b> ihalede 13 diyen "Çiz" demiş olur. 13 elin hepsini alırsa oyun hemen biter ve kazanır; alamazsa karşı taraf oyunu kazanır (tekli'de diğer oyuncuların en yüksek puanlısı).</p>
 <h3>Kahveci</h3>
 <p>Arada kahveci "Ne içersiniz?" diye sorar; seçtiğin içecek (çay, kivi, nane limon, zahter, portakal, kuşburnu) tulip bardakta, rengine göre gelir. Botlar da içecek alır. Bardaklar her elde biraz azalır; hepsi bitince kahveci 3-4 el bekler, sonra yeniden sorar. Her içecek <b>10 TL</b>'dir; oyun sonunda toplam hesabı en düşük puanlı (kaybeden) öder. Menüden kapatılabilir.</p>
 <h3>Oyun sonu</h3>
@@ -597,7 +597,7 @@ function scoreDeal(G){
   }else if(M.team){
     const dt=W[d]+W[(d+2)%4];made=dt>=G.bid;const td=d%2,to=1-td;
     delta[td]=made?dt:-G.bid;delta[to]=W[to]+W[to+2];
-    if(G.cfg.bust)for(let t=0;t<2;t++)if(W[t]<=1||W[t+2]<=1){delta[t]=-G.bid;for(const q of [t,t+2])if(W[q]<=1)bust.push(q);}
+    if(G.cfg.bust&&W[to]+W[to+2]<=1){delta[to]=-G.bid;bust.push(to,to+2);}
   }else{
     made=W[d]>=G.bid;
     for(let s=0;s<G.n;s++)delta[s]=s===d?(made?W[d]:-G.bid):W[s];
@@ -1212,7 +1212,7 @@ function openMenu(){
   if(m.mode==='tekli'||m.mode==='esli')h+='<h3>Koz</h3><div class="opts">'+optBtn('trumpMode','spade','Maça sabit')+optBtn('trumpMode','choose','İhaleci seçer')+'</div>';
   if(m.mode==='esli')h+='<h3>Eşli ayarı</h3><div class="opts">'+optBtn('dummy',true,'Açık eş','ihaleden sonra eş eli açar, kartı ihaleci oynar')+optBtn('dummy',false,'Kapalı','klasik, herkes kendi elini oynar')+'</div>';
   if(m.mode==='esli')h+='<h3>Eş yardımı</h3><div class="opts">'+optBtn('help',true,'Açık','ihaleden önce eşinle elin hakkında konuşursun')+optBtn('help',false,'Kapalı')+'</div>';
-  if(m.mode==='tekli'||m.mode==='esli')h+='<h3>Batma kuralı</h3><div class="opts">'+optBtn('bust',true,'Açık',m.mode==='esli'?'0 ya da 1 el alan batar, ihale kadar eksi':'0 el alan batar, ihale kadar eksi')+optBtn('bust',false,'Kapalı')+'</div>';
+  if(m.mode==='tekli'||m.mode==='esli')h+='<h3>Batma kuralı</h3><div class="opts">'+optBtn('bust',true,'Açık',m.mode==='esli'?'karşı takım toplam 0-1 el alırsa batar (2+ batmaz); ihaleci ihaleyi alamazsa ihale kadar eksi':'0 el alan batar, ihale kadar eksi')+optBtn('bust',false,'Kapalı')+'</div>';
   h+='<h3>Kahveci</h3><div class="opts">'+optBtn('cafe',true,'Açık','arada içecek sorar, oyun sonunda kaybeden öder')+optBtn('cafe',false,'Kapalı')+'</div>';
   h+='<h3>Hız</h3><div class="opts">'+optBtn('speed',1.6,'Yavaş')+optBtn('speed',1,'Normal')+optBtn('speed',0.45,'Hızlı')+'</div>';
   h+='<div class="row"><button class="btn" id="mRulesBtn">Kurallar</button><button class="btn gold" id="mStart">▶ Oyunu Başlat</button></div>';
